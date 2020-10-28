@@ -16,7 +16,7 @@ env:
   - name: APPLICATION_INSIGHTS_IKEY
     valueFrom:
       secretKeyRef:
-        name: {{ template "app.name" . }}
+        name: crime-portal-gateway-secrets
         key: APPINSIGHTS_INSTRUMENTATIONKEY
 
 {{- end -}}
