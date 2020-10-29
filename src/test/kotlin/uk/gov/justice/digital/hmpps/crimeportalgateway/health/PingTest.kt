@@ -9,6 +9,6 @@ internal class PingTest {
 
     @Test
     fun `Ping returns pong`() {
-        Assertions.assertThat(ping.ping()).isEqualTo("pon")
+        Assertions.assertThat(ping.ping()).isEqualTo("pong")
     }
 }
