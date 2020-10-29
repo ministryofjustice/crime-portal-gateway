@@ -32,15 +32,15 @@ jobs:
                   "type": "section",
                   "fields": [
                     {
-                      "type": "plain_text",
-                      "text": "*This is a text notification*",
+                      "type": "mrkdwn",
+                      "text": ":stop_sign: Build failed for crime-portal-gateway",
                       "emoji": true
                     }
                   ]
                 }
               ]
             }
-          event: always
+          event: failure
 
 workflows:
   version: 2
