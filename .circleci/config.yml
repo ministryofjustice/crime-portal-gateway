@@ -40,7 +40,7 @@ jobs:
                 }
               ]
             }
-          event: failure
+          event: fail
 
 workflows:
   version: 2
