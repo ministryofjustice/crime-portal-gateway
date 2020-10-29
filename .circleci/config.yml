@@ -32,7 +32,7 @@ jobs:
                   "type": "section",
                   "fields": [
                     {
-                      "type": "mrkdwn",
+                      "type": "plain_text",
                       "text": "Build validation failed for crime portal gateway",
                       "emoji": true
                     }
