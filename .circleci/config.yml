@@ -25,9 +25,8 @@ jobs:
       - store_artifacts:
           path: build/reports/tests
       - slack/notify:
-          channel: probation_in_court_dev
           event: always
-          custom: test-message
+          custom: test
 
 workflows:
   version: 2
