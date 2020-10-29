@@ -25,8 +25,22 @@ jobs:
       - store_artifacts:
           path: build/reports/tests
       - slack/notify:
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*This is a text notification*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
           event: always
-          custom: test
 
 workflows:
   version: 2
