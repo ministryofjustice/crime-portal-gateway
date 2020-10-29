@@ -33,7 +33,8 @@ jobs:
                   "fields": [
                     {
                       "type": "mrkdwn",
-                      "text": ":Build failed for crime-portal-gateway"
+                      "text": ":Build failed for crime-portal-gateway",
+                      "emoji": true
                     }
                   ]
                 }
