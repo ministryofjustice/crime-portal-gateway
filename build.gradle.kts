@@ -11,6 +11,7 @@ configurations {
 
 val jaxbVersion by extra { "2.3.1" }
 val lombokVersion by extra { "1.18.6" }
+val junitJupiterVersion by extra { "5.4.2" }
 
 dependencies {
 
@@ -23,13 +24,10 @@ dependencies {
   implementation("wsdl4j:wsdl4j")
   implementation("javax.xml.bind:jaxb-api:$jaxbVersion")
 
-  // TODO - check this is needed !
-//  implementation("org.apache.ws.xmlschema:xmlschema-core:2.2.4")
-
   runtimeOnly("javax.xml.bind:jaxb-api:$jaxbVersion")
   runtimeOnly("org.glassfish.jaxb:jaxb-runtime:$jaxbVersion")
 
-  testImplementation("org.junit.jupiter:junit-jupiter:5.4.2")
+  testImplementation("org.junit.jupiter:junit-jupiter:$junitJupiterVersion")
   testImplementation("org.springframework.ws:spring-ws-test")
   testImplementation("junit:junit:4.12")
   testImplementation("org.mockito:mockito-core")
