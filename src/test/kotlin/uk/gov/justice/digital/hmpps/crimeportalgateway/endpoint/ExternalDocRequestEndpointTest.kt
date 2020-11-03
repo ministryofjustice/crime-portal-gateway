@@ -9,7 +9,7 @@ internal class ExternalDocRequestEndpointTest {
     private val endpoint = ExternalDocRequestEndpoint()
 
     @Test
-    fun `given success should return true and correct acknowledgement message`() {
+    fun `given success should the correct acknowledgement message`() {
         val request = ExternalDocumentRequest()
 
         val ack = endpoint.processRequest(request)
