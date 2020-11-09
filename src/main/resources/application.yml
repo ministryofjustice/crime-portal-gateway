@@ -54,6 +54,7 @@ soap:
   ws-location-uri: /crime-portal-gateway/ws/
   target-namespace: http://www.justice.gov.uk/magistrates/external/ExternalDocumentRequest
   inbound-encrypt-actions: "Timestamp Signature Encrypt"
+  keystore-file-path: /mnt/secrets/crime-portal-gateway-jks.key
 
 #org:
 #  apache:

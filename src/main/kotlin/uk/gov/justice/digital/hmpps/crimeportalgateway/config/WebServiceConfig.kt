@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.io.ClassPathResource
 import org.springframework.core.io.FileSystemResource
+import org.springframework.core.io.Resource
 import org.springframework.web.context.WebApplicationContext
 import org.springframework.ws.config.annotation.EnableWs
 import org.springframework.ws.soap.SoapVersion
@@ -22,10 +23,14 @@ import org.springframework.xml.xsd.XsdSchema
 class WebServiceConfig(@Value("\${soap.ws-location-uri}") private val wsLocationUri: String,
                         @Value("\${soap.target-namespace}") private val targetNamespace : String) {
 
+    @Bean
+    fun externalDocumentXsdResource(): Resource {
+        return FileSystemResource(EXT_REQ_XSD);
+    }
 
     @Bean
-    fun externalDocumentRequestWsdl(): SimpleWsdl11Definition {
-        return SimpleWsdl11Definition(ClassPathResource(EXT_REQ_XSD))
+    fun externalDocumentRequestWsdl(externalDocumentXsdResource: Resource): SimpleWsdl11Definition {
+        return SimpleWsdl11Definition(externalDocumentXsdResource)
     }
 
     @Bean
@@ -53,8 +58,8 @@ class WebServiceConfig(@Value("\${soap.ws-location-uri}") private val wsLocation
     }
 
     @Bean
-    fun requestSchema(): XsdSchema {
-        return SimpleXsdSchema(FileSystemResource(EXT_REQ_XSD))
+    fun requestSchema(externalDocumentXsdResource: Resource): XsdSchema {
+        return SimpleXsdSchema(externalDocumentXsdResource)
     }
 
     companion object {
