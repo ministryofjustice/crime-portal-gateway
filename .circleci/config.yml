@@ -73,6 +73,7 @@ workflows:
             branches:
               only:
                 - main
+                - PIC-850-message-signing
           requires:
             - validate
             - build_docker

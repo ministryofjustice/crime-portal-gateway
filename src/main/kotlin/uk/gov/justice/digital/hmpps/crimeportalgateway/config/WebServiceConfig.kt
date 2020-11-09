@@ -6,6 +6,7 @@ import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.io.ClassPathResource
+import org.springframework.core.io.FileSystemResource
 import org.springframework.web.context.WebApplicationContext
 import org.springframework.ws.config.annotation.EnableWs
 import org.springframework.ws.soap.SoapVersion
@@ -53,7 +54,7 @@ class WebServiceConfig(@Value("\${soap.ws-location-uri}") private val wsLocation
 
     @Bean
     fun requestSchema(): XsdSchema {
-        return SimpleXsdSchema(ClassPathResource(EXT_REQ_XSD))
+        return SimpleXsdSchema(FileSystemResource(EXT_REQ_XSD))
     }
 
     companion object {
