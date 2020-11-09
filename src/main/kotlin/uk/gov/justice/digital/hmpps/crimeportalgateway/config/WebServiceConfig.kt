@@ -58,6 +58,6 @@ class WebServiceConfig(@Value("\${soap.ws-location-uri}") private val wsLocation
     }
 
     companion object {
-        const val EXT_REQ_XSD = "xsd/cp/External/ExternalDocumentRequest.xsd"
+        const val EXT_REQ_XSD = "src/main/resources/xsd/cp/External/ExternalDocumentRequest.xsd"
     }
 }
