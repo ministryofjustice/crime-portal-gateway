@@ -1,14 +1,19 @@
 package uk.gov.justice.digital.hmpps.crimeportalgateway.config
 
 import org.slf4j.LoggerFactory
+import org.springframework.ws.client.WebServiceClientException
 import org.springframework.ws.context.MessageContext
 import org.springframework.ws.server.EndpointInterceptor
 import org.springframework.ws.soap.saaj.SaajSoapMessage
+import java.io.ByteArrayOutputStream
+import java.io.IOException
+import java.nio.charset.StandardCharsets
 import java.util.*
 import javax.xml.soap.SOAPElement
 import javax.xml.soap.SOAPException
 import javax.xml.soap.SOAPHeader
 import javax.xml.soap.SOAPHeaderElement
+
 
 class SoapHeaderAddressInterceptor : EndpointInterceptor {
 
@@ -38,13 +43,21 @@ class SoapHeaderAddressInterceptor : EndpointInterceptor {
         return true
     }
 
-    override fun handleFault(messageContext: MessageContext?, p1: Any?): Boolean {
-        TODO("Not yet implemented")
+    override fun handleFault(messageContext: MessageContext, p1: Any?): Boolean {
+        try {
+            val buffer = ByteArrayOutputStream()
+            messageContext.response.writeTo(buffer)
+            val payload: String = buffer.toString(StandardCharsets.UTF_8.name())
+            log.error(payload)
+        } catch (e: IOException) {
+            throw object : WebServiceClientException("Can not write the SOAP fault into the out stream", e) {
+                private val serialVersionUID = 3538336091916808141L
+            }
+        }
         return true
     }
 
     override fun afterCompletion(messageContext: MessageContext?, p1: Any?, p2: Exception?) {
-        TODO("Not yet implemented")
     }
 
     private fun addTextNodeToNewElement(soapElement: SOAPElement, elementName: String, elementTextNode: String) {

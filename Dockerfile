@@ -28,3 +28,5 @@ COPY --from=builder --chown=appuser:appgroup /app/AI-Agent.xml /app
 USER 2000
 
 ENTRYPOINT ["java", "-javaagent:/app/agent.jar", "-jar", "/app/app.jar"]
+
+EXPOSE 8080

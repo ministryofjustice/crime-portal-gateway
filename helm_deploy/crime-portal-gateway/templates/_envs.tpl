@@ -19,4 +19,16 @@ env:
         name: crime-portal-gateway-secrets
         key: APPINSIGHTS_INSTRUMENTATIONKEY
 
+  - name: KEYSTORE_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: crime-portal-gateway-secrets
+        key: KEYSTORE_PASSWORD
+
+{{/*  - name: KEYSTORE*/}}
+{{/*    valueFrom:*/}}
+{{/*      secretKeyRef:*/}}
+{{/*        name: crime-portal-gateway-keystore-cert*/}}
+{{/*        key: keystore.jks*/}}
+
 {{- end -}}

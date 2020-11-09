@@ -2,6 +2,7 @@ package uk.gov.justice.digital.hmpps.crimeportalgateway
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.ws.config.annotation.EnableWs
 
 @SpringBootApplication
 class CrimePortalGateway

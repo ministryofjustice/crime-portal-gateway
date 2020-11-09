@@ -1,13 +1,13 @@
 package uk.gov.justice.digital.hmpps.crimeportalgateway.config
 
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.web.servlet.ServletRegistrationBean
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.io.ClassPathResource
+import org.springframework.web.context.WebApplicationContext
 import org.springframework.ws.config.annotation.EnableWs
-import org.springframework.ws.config.annotation.WsConfigurerAdapter
-import org.springframework.ws.server.EndpointInterceptor
 import org.springframework.ws.soap.SoapVersion
 import org.springframework.ws.soap.saaj.SaajSoapMessageFactory
 import org.springframework.ws.transport.http.MessageDispatcherServlet
@@ -18,45 +18,41 @@ import org.springframework.xml.xsd.XsdSchema
 
 @EnableWs
 @Configuration
-class WebServiceConfig : WsConfigurerAdapter() {
+class WebServiceConfig(@Value("\${soap.ws-location-uri}") private val wsLocationUri: String,
+                        @Value("\${soap.target-namespace}") private val targetNamespace : String) {
 
-    override fun addInterceptors(interceptors: MutableList<EndpointInterceptor?>) {
-        interceptors.add(SoapHeaderAddressInterceptor())
-    }
 
     @Bean
-    fun externalDocumentRequestWsdl(): SimpleWsdl11Definition? {
+    fun externalDocumentRequestWsdl(): SimpleWsdl11Definition {
         return SimpleWsdl11Definition(ClassPathResource(EXT_REQ_XSD))
     }
 
     @Bean
     fun messageDispatcherServlet(applicationContext: ApplicationContext): ServletRegistrationBean<*>? {
-        val servlet = MessageDispatcherServlet()
-        servlet.setApplicationContext(applicationContext)
+        val servlet = MessageDispatcherServlet(applicationContext as WebApplicationContext?)
         servlet.isTransformWsdlLocations = true
-        return ServletRegistrationBean(servlet, "/crime-portal-gateway/ws/*")
+        return ServletRegistrationBean(servlet, "$wsLocationUri*")
     }
 
     @Bean
-    fun messageFactory(): SaajSoapMessageFactory? {
+    fun messageFactory(): SaajSoapMessageFactory {
         val messageFactory = SaajSoapMessageFactory()
         messageFactory.setSoapVersion(SoapVersion.SOAP_12)
         return messageFactory
     }
 
     @Bean(name = ["ExternalDocumentRequest"])
-    fun wsdl11Definition(requestSchema: XsdSchema?): DefaultWsdl11Definition? {
+    fun wsdl11Definition(requestSchema: XsdSchema): DefaultWsdl11Definition? {
         val wsdl11Definition = DefaultWsdl11Definition()
         wsdl11Definition.setPortTypeName("WebServicePort")
-        wsdl11Definition.setLocationUri("/crime-portal-gateway/")
-        wsdl11Definition.setTargetNamespace("http://www.justice.gov.uk/magistrates/external/ExternalDocumentRequest")
-        //        wsdl11Definition.setSchemaCollection(getXsds());
+        wsdl11Definition.setLocationUri(wsLocationUri)
+        wsdl11Definition.setTargetNamespace(targetNamespace)
         wsdl11Definition.setSchema(requestSchema)
         return wsdl11Definition
     }
 
     @Bean
-    fun requestSchema(): XsdSchema? {
+    fun requestSchema(): XsdSchema {
         return SimpleXsdSchema(ClassPathResource(EXT_REQ_XSD))
     }
 

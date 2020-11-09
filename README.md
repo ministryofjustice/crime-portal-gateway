@@ -10,11 +10,17 @@ Run the application as a Spring Boot app.
 
 ```./gradlew bootRun```
 
+# WSDL
+
+The generated WSDL will be available at the following location 
+
+```http://localhost:8080/crime-portal-gateway/ws/ExternalDocumentRequest.wsdl```
+
 # Testing - CURL
 
 If the application has been started, it is possible to execute the following command from the project root to call the SOAP endpoint.
 
-```curl --header "content-type: application/soap+xml" -d @src/test/resources/sample-soap-request.xml http://localhost:8080/ws```
+```curl --header "content-type: application/soap+xml" -d @src/test/resources/sample-soap-request.xml http://localhost:8080/crime-portal-gateway/ws```
 
 # Testing - SOAP-UI
 
