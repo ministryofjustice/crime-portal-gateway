@@ -21,11 +21,12 @@ import org.springframework.xml.xsd.XsdSchema
 @EnableWs
 @Configuration
 class WebServiceConfig(@Value("\${soap.ws-location-uri}") private val wsLocationUri: String,
-                        @Value("\${soap.target-namespace}") private val targetNamespace : String) {
+                        @Value("\${soap.target-namespace}") private val targetNamespace : String,
+                        @Value("\${soap.xsd-file-path}") private val xsdFilePath : String) {
 
     @Bean
     fun externalDocumentXsdResource(): Resource {
-        return FileSystemResource(EXT_REQ_XSD);
+        return FileSystemResource(xsdFilePath);
     }
 
     @Bean
@@ -62,7 +63,4 @@ class WebServiceConfig(@Value("\${soap.ws-location-uri}") private val wsLocation
         return SimpleXsdSchema(externalDocumentXsdResource)
     }
 
-    companion object {
-        const val EXT_REQ_XSD = "src/main/resources/xsd/cp/External/ExternalDocumentRequest.xsd"
-    }
 }

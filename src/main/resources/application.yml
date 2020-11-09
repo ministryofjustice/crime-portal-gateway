@@ -55,6 +55,7 @@ soap:
   target-namespace: http://www.justice.gov.uk/magistrates/external/ExternalDocumentRequest
   inbound-encrypt-actions: "Timestamp Signature Encrypt"
   keystore-file-path: /mnt/secrets/crime-portal-gateway-jks.key
+  xsd-file-path: /app/ExternalDocumentRequest.xsd
 
 #org:
 #  apache:

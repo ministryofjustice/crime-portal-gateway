@@ -13,4 +13,7 @@ management.endpoint:
   health.cache.time-to-live: 0
   info.cache.time-to-live: 0
 
+soap:
+  xsd-file-path: src/main/resources/xsd/cp/external/ExternalDocumentRequest.xsd
+
 
