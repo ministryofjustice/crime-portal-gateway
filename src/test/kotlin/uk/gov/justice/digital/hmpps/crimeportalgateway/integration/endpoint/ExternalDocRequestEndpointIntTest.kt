@@ -79,20 +79,20 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
 
         private const val sqsMessageId = "a4e9ab53-f8aa-bf2c-7291-d0293a8b0d02"
 
-        private const val externalDocRequest: String = """<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:ns35="http://www.justice.gov.uk/magistrates/external/ExternalDocumentRequest">\n>" +
-                "<soap:Header xmlns:wsa="http://www.w3.org/2005/08/addressing">\n" +
-                "   <wsa:Action>externalDocument</wsa:Action>\n" +
-                "   <wsa:From>\n" +
-                "         <wsa:Address>CP_NPS_ML</wsa:Address>\n" +
-                "   </wsa:From>\n" +
-                "      <wsa:MessageID>09233523-345b-4351-b623-5dsf35sgs5d6</wsa:MessageID>\n" +
-                "      <wsa:RelatesTo>RelatesToValue</wsa:RelatesTo>\n" +
-                "      <wsa:To>CP_NPS</wsa:To>\n" +
-                "</soap:Header>\n" +
-                "<soap:Body>\n" +
-                "   <ns35:ExternalDocumentRequest><documents></documents></ns35:ExternalDocumentRequest>\n" +
-                "</soap:Body>\n" +
-                "</soap:Envelope>"""
+        private const val externalDocRequest: String = """<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:ns35="http://www.justice.gov.uk/magistrates/external/ExternalDocumentRequest">\n>
+                <soap:Header xmlns:wsa="http://www.w3.org/2005/08/addressing">\n
+                   <wsa:Action>externalDocument</wsa:Action>\n 
+                   <wsa:From>\n
+                         <wsa:Address>CP_NPS_ML</wsa:Address>\n
+                   </wsa:From>\n
+                      <wsa:MessageID>09233523-345b-4351-b623-5dsf35sgs5d6</wsa:MessageID>\n
+                      <wsa:RelatesTo>RelatesToValue</wsa:RelatesTo>\n
+                      <wsa:To>CP_NPS</wsa:To>\n
+                </soap:Header>\n
+                <soap:Body>\n
+                   <ns35:ExternalDocumentRequest><documents></documents></ns35:ExternalDocumentRequest>\n
+                </soap:Body>\n
+                </soap:Envelope>"""
 
         @JvmStatic
         @BeforeAll
