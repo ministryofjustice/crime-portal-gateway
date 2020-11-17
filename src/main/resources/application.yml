@@ -12,7 +12,6 @@ spring:
   logging:
     level:
       org.springframework.web: INFO
-
   jackson:
     date-format: "yyyy-MM-dd HH:mm:ss"
     serialization:
@@ -49,6 +48,9 @@ management:
     info:
       cache:
         time-to-live: 2000ms
+
+aws:
+  region-name: eu-west-2
 
 soap:
   ws-location-uri: /crime-portal-gateway/ws/

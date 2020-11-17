@@ -8,7 +8,7 @@
   version="2.1">
 
   <jaxb:globalBindings>
-    <xjc:javaType name="java.time.LocalDateTime" xmlType="xs:dateTime"
+      <xjc:javaType name="java.time.LocalDateTime" xmlType="xs:dateTime"
         adapter="uk.gov.justice.digital.hmpps.crimeportalgateway.xml.LocalDateTimeAdapter" />
   </jaxb:globalBindings>
 

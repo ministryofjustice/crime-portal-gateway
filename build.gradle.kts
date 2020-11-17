@@ -3,10 +3,7 @@ plugins {
   id("uk.gov.justice.hmpps.gradle-spring-boot") version "1.0.6"
   kotlin("plugin.spring") version "1.4.10"
   id("org.unbroken-dome.xjc") version "2.0.0"
-}
-
-configurations {
-//  testImplementation { exclude(group = "org.junit.vintage") }
+  id("org.owasp.dependencycheck") version "6.0.3"
 }
 
 val jaxbVersion by extra { "2.3.1" }
@@ -20,9 +17,11 @@ dependencies {
 
   implementation("org.springframework.boot:spring-boot-starter-web")
   implementation("org.springframework.boot:spring-boot-starter-webflux")
+  implementation("org.springframework.ws:spring-ws-security")
   implementation("org.springframework.boot:spring-boot-devtools")
   implementation("org.springframework.boot:spring-boot-starter-web-services")
-  implementation("org.springframework.ws:spring-ws-security")
+  implementation("com.microsoft.azure:applicationinsights-spring-boot-starter")
+  implementation("com.amazonaws:aws-java-sdk-sqs:1.11.899")
   implementation("wsdl4j:wsdl4j")
   implementation("javax.xml.bind:jaxb-api:$jaxbVersion")
 
@@ -42,26 +41,3 @@ xjc {
 sourceSets.named("main") {
   xjcBinding.srcDir("resources/xsd")
 }
-
-// TODO check if this is needed
-val test by tasks.getting(Test::class) {
-  useJUnitPlatform ()
-
-//  testLogging {
-//    events "started", "passed", "skipped", "failed", "standardError"
-//    exceptionFormat "short"
-//    showStackTraces = true
-//    showExceptions = true
-//    showCauses = true
-//
-//    afterSuite { desc, result ->
-//      if (!desc.parent) { // will match the outermost suite
-//        println "Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)"
-//      }
-//    }
-//  }
-}
-
-//val integrationTest by tasks.getting(Test::class) {
-//  useJUnitPlatform ()
-//}

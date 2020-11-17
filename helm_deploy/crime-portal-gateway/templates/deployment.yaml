@@ -68,5 +68,3 @@ spec:
             items:
               - key: crime-portal-gateway-jks.key
                 path: crime-portal-gateway-jks.key
-
-
