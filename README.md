@@ -10,6 +10,17 @@ Run the application as a Spring Boot app.
 
 ```./gradlew bootRun```
 
+# Health / Ping endpoints
+
+The application is configured with a Spring health endpoint at the following location. It is customised to provide a status of the SQS queue.
+
+```http://localhost:8080/health/```
+
+There is also a "ping" endpoint available at
+
+```http://localhost:8080/health/ping```
+
+
 # WSDL
 
 The generated WSDL will be available at the following location

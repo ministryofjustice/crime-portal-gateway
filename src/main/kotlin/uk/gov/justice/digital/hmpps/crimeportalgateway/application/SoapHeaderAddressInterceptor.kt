@@ -46,16 +46,9 @@ class SoapHeaderAddressInterceptor(private val telemetryService: TelemetryServic
 
     override fun handleFault(messageContext: MessageContext, p1: Any?): Boolean {
         telemetryService.trackEvent(TelemetryEventType.COURT_LIST_MESSAGE_ERROR)
-        try {
-            val buffer = ByteArrayOutputStream()
-            messageContext.response.writeTo(buffer)
-            val payload: String = buffer.toString(StandardCharsets.UTF_8.name())
-            log.error(payload)
-        } catch (e: IOException) {
-            throw object : WebServiceClientException("Can not write the SOAP fault into the out stream", e) {
-                private val serialVersionUID = 3538336091916808141L
-            }
-        }
+        val buffer = ByteArrayOutputStream()
+        messageContext.response.writeTo(buffer)
+        log.error(buffer.toString(StandardCharsets.UTF_8.name()))
         return true
     }
 

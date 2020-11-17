@@ -51,27 +51,27 @@ class WebServiceConfig(@Value("\${soap.ws-location-uri}") private val wsLocation
 
     @Bean
     fun messageDispatcherServlet(applicationContext: ApplicationContext): ServletRegistrationBean<*>? {
-        val servlet = MessageDispatcherServlet(applicationContext as WebApplicationContext)
-        servlet.setApplicationContext(applicationContext)
-        servlet.isTransformWsdlLocations = true
-        return ServletRegistrationBean(servlet, "$wsLocationUri*")
+        return ServletRegistrationBean(MessageDispatcherServlet(applicationContext as WebApplicationContext).apply {
+            setApplicationContext(applicationContext)
+            isTransformWsdlLocations = true
+        }, "$wsLocationUri*")
     }
 
     @Bean
     fun messageFactory(): SaajSoapMessageFactory {
-        val messageFactory = SaajSoapMessageFactory()
-        messageFactory.setSoapVersion(SoapVersion.SOAP_12)
-        return messageFactory
+        return SaajSoapMessageFactory().apply {
+            setSoapVersion(SoapVersion.SOAP_12)
+        }
     }
 
     @Bean(name = ["ExternalDocumentRequest"])
     fun wsdl11Definition(requestSchema: XsdSchema): DefaultWsdl11Definition? {
-        val wsdl11Definition = DefaultWsdl11Definition()
-        wsdl11Definition.setPortTypeName("WebServicePort")
-        wsdl11Definition.setLocationUri(wsLocationUri)
-        wsdl11Definition.setTargetNamespace(targetNamespace)
-        wsdl11Definition.setSchema(requestSchema)
-        return wsdl11Definition
+        return DefaultWsdl11Definition().apply {
+            setPortTypeName("WebServicePort")
+            setLocationUri(wsLocationUri)
+            setTargetNamespace(targetNamespace)
+            setSchema(requestSchema)
+        }
     }
 
     @Bean

@@ -32,9 +32,4 @@ class InfoTest : IntegrationTestBase() {
             }
     }
 
-//    @TestConfiguration
-//    internal class MyTestConfig {
-//        @MockBean
-//        private lateinit var sqsService: SqsService
-//    }
 }

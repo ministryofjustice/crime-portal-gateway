@@ -33,13 +33,13 @@ class ExternalDocRequestEndpoint(@Autowired val telemetryService: TelemetryServi
         val messageId = sqsService.enqueueMessage(marshal(request))
         telemetryService.trackEvent(TelemetryEventType.COURT_LIST_MESSAGE_RECEIVED)
 
-        val ackType = AckType()
-        ackType.messageComment = String.format(SUCCESS_MESSAGE_COMMENT, messageId)
-        ackType.messageStatus = SUCCESS_MESSAGE_STATUS
-        ackType.timeStamp = LocalDateTime.now()
-        val acknowledgement = Acknowledgement()
-        acknowledgement.ackType = ackType
-        return acknowledgement
+        return Acknowledgement().apply {
+            ackType = AckType().apply {
+                messageComment = String.format(SUCCESS_MESSAGE_COMMENT, messageId)
+                messageStatus = SUCCESS_MESSAGE_STATUS
+                timeStamp = LocalDateTime.now()
+            }
+        }
     }
 
     private fun marshal(request: ExternalDocumentRequest): String {
