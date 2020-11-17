@@ -41,7 +41,7 @@ env:
     valueFrom:
       secretKeyRef:
         name: crime-portal-gateway-queue-credentials
-        key: sqs_name
+        key: sqs_id
 
   - name: KEYSTORE_PASSWORD
     valueFrom:
