@@ -51,13 +51,17 @@ management:
 
 aws:
   region-name: eu-west-2
+  sqs-endpoint-url: "https://sqs.eu-west-2.amazonaws.com/"
 
 soap:
   ws-location-uri: /crime-portal-gateway/ws/
   target-namespace: http://www.justice.gov.uk/magistrates/external/ExternalDocumentRequest
-  inbound-encrypt-actions: "Timestamp Signature Encrypt"
-  keystore-file-path: /mnt/secrets/crime-portal-gateway-jks.key
   xsd-file-path: /app/ExternalDocumentRequest.xsd
+
+ws-sec:
+  keystore-password: changeit
+  keystore-file-path: /mnt/secrets/crime-portal-gateway-jks.key
+  inbound-encrypt-actions: "Timestamp Signature Encrypt"
 
 #org:
 #  apache:
