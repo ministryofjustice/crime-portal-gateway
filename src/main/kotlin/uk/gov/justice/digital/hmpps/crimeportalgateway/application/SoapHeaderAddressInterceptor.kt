@@ -1,14 +1,12 @@
 package uk.gov.justice.digital.hmpps.crimeportalgateway.application
 
 import org.slf4j.LoggerFactory
-import org.springframework.ws.client.WebServiceClientException
 import org.springframework.ws.context.MessageContext
 import org.springframework.ws.server.EndpointInterceptor
 import org.springframework.ws.soap.saaj.SaajSoapMessage
 import uk.gov.justice.digital.hmpps.crimeportalgateway.service.TelemetryEventType
 import uk.gov.justice.digital.hmpps.crimeportalgateway.service.TelemetryService
 import java.io.ByteArrayOutputStream
-import java.io.IOException
 import java.nio.charset.StandardCharsets
 import java.util.*
 import javax.xml.soap.SOAPElement
