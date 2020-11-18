@@ -51,7 +51,6 @@ management:
 
 aws:
   region-name: eu-west-2
-  sqs-endpoint-url: "https://sqs.eu-west-2.amazonaws.com/"
 
 soap:
   ws-location-uri: /crime-portal-gateway/ws/

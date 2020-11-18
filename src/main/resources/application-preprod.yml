@@ -1,0 +1,6 @@
+spring:
+  logging:
+    level:
+      org.springframework.web: DEBUG
+      org.springframework.ws.server.MessageTracing.received: TRACE
+      org.springframework.ws.client.MessageTracing: TRACE
