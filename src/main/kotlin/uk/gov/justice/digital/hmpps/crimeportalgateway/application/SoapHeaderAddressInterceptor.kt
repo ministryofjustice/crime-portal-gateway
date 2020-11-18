@@ -8,7 +8,9 @@ import uk.gov.justice.digital.hmpps.crimeportalgateway.service.TelemetryEventTyp
 import uk.gov.justice.digital.hmpps.crimeportalgateway.service.TelemetryService
 import java.io.ByteArrayOutputStream
 import java.nio.charset.StandardCharsets
-import java.util.*
+import java.util.Collections
+import java.util.HashMap
+import java.util.UUID
 import javax.xml.soap.SOAPElement
 import javax.xml.soap.SOAPException
 import javax.xml.soap.SOAPHeader
@@ -26,14 +28,24 @@ class SoapHeaderAddressInterceptor(private val telemetryService: TelemetryServic
 
         val soapResponseHeader = soapResponseMessage.saajMessage?.soapPart?.envelope?.header
         if (soapResponseHeader != null) {
-            val requestHeaders: Map<String, String> = getHeaderMap(soapRequestMessage.saajMessage?.soapPart?.envelope?.header)
-            addTextNodeToNewElement(soapResponseHeader, "Action", requestHeaders["Action"]
-                    ?: "externalDocument")
+            val requestHeaders: Map<String, String> =
+                getHeaderMap(soapRequestMessage.saajMessage?.soapPart?.envelope?.header)
+            addTextNodeToNewElement(
+                soapResponseHeader,
+                "Action",
+                requestHeaders["Action"] ?: "externalDocument"
+            )
             addTextNodeToNewElement(soapResponseHeader, "MessageID", UUID.randomUUID().toString())
-            addTextNodeToNewElement(soapResponseHeader, "To", requestHeaders["From"]
-                    ?: "")
-            addTextNodeToNewElement(soapResponseHeader, "RelatesTo", requestHeaders["MessageID"]
-                    ?: "")
+            addTextNodeToNewElement(
+                soapResponseHeader,
+                "To",
+                requestHeaders["From"] ?: ""
+            )
+            addTextNodeToNewElement(
+                soapResponseHeader,
+                "RelatesTo",
+                requestHeaders["MessageID"] ?: ""
+            )
 
             val soapElement = soapResponseHeader.addChildElement("From", "", SOAP_ENV_ADDRESS_NS)
             addTextNodeToNewElement(soapElement, "Address", requestHeaders["To"] ?: "")
@@ -67,8 +79,8 @@ class SoapHeaderAddressInterceptor(private val telemetryService: TelemetryServic
         val headerMap: MutableMap<String, String> = HashMap()
 
         val headerElements: MutableIterator<SOAPHeaderElement>? =
-                if (soapHeader != null) soapHeader.examineAllHeaderElements()
-                else Collections.emptyIterator()
+            if (soapHeader != null) soapHeader.examineAllHeaderElements()
+            else Collections.emptyIterator()
 
         headerElements?.forEachRemaining { hdr: SOAPHeaderElement ->
             headerMap[hdr.localName] = hdr.textContent.trim()
