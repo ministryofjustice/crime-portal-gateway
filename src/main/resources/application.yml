@@ -62,30 +62,3 @@ ws-sec:
   keystore-file-path: /mnt/secrets/crime-portal-gateway-jks.key
   request-encrypt-actions: "Signature Encrypt"
   response-encrypt-actions: "Signature Encrypt"
-
-#org:
-#  apache:
-#    ws:
-#      security:
-#        crypto:
-#          provider: org.apache.ws.security.components.crypto.Merlin
-#          merlin:
-#            keystore:
-#              type: JKS
-#              file: MGWKeyStore.jks
-#              #password: j8~~|ph~1K9+#F
-#              #alias: mgwextdoc
-
-#  org.apache.ws.security.crypto.provider=org.apache.ws.security.components.crypto.Merlin
-#  org.apache.ws.security.crypto.merlin.keystore.type=JKS
-#  org.apache.ws.security.crypto.merlin.keystore.file=MGWKeyStore.jks
-#  org.apache.ws.security.crypto.merlin.keystore.password=j8~~|ph~1K9+#F
-#  org.apache.ws.security.crypto.merlin.keystore.alias=mgwextdoc
-
-#https://stackoverflowßcom/questions/61320311/signing-soap-header-using-wss4j-in-spring-throwing-errors-caused-by-java-secur:
-#  properties.setProperty("org.apache.ws.security.crypto.provider", "org.apache.wss4j.common.crypto.Merlin");
-#  properties.setProperty("org.apache.wss4j.crypto.merlin.keystore.alias", "1");
-#  properties.setProperty("org.apache.ws.security.crypto.merlin.keystore.type", "PKCS12");
-#  properties.setProperty("org.apache.ws.security.crypto.merlin.keystore.password", "123456");
-#  properties.setProperty("org.apache.ws.security.crypto.merlin.keystore.file",
-#  "C:\\abc.p12"
