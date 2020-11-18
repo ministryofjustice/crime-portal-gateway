@@ -12,9 +12,14 @@ import java.io.IOException
 
 @Profile("prod", "preprod", "dev")
 @Configuration
-class WebServiceSecurityConfig(@Value("\${ws-sec.keystore-password}") private val keystorePassword: String,
-                               @Value("\${soap.inbound-encrypt-actions}") private val inboundActions: String,
-                               @Value("\${ws-sec.keystore-file-path}") private val keystoreFilePath: String) {
+class WebServiceSecurityConfig(
+    @Value("\${keystore-password}") private val keystorePassword: String,
+    @Value("\${ws-sec.request-encrypt-actions}") private val requestActions: String,
+    @Value("\${ws-sec.response-encrypt-actions}") private val responseActions: String,
+    @Value("\${trusted_cert_alias_name}") private val trustedCertAliasName: String,
+    @Value("\${keystore-file-path}") private val keystoreFilePath: String,
+    @Value("\${private_key_alias_name}") private val privateKeyAliasName: String,
+) {
 
     @Bean
     fun securityCallbackHandler(): KeyStoreCallbackHandler {
@@ -37,23 +42,24 @@ class WebServiceSecurityConfig(@Value("\${ws-sec.keystore-password}") private va
     fun securityInterceptor(): Wss4jSecurityInterceptor {
         val securityInterceptor = Wss4jSecurityInterceptor()
 
+        val cryptoBean = getCryptoFactoryBean().getObject()
+
         // validate incoming request
-        securityInterceptor.setValidationActions(inboundActions)
-        securityInterceptor.setValidationSignatureCrypto(getCryptoFactoryBean().getObject())
-        securityInterceptor.setValidationDecryptionCrypto(getCryptoFactoryBean().getObject())
+        securityInterceptor.setValidationActions(requestActions)
+        securityInterceptor.setValidationSignatureCrypto(cryptoBean)
+        securityInterceptor.setValidationDecryptionCrypto(cryptoBean)
         securityInterceptor.setValidationCallbackHandler(securityCallbackHandler())
 
-        // encrypt and sign the response
-        securityInterceptor.setSecurementEncryptionUser("client-public")
-        securityInterceptor.setSecurementEncryptionParts("{Content}{http://www.justice.gov.uk/magistrates/external/ExternalDocumentRequest}")
+        // encrypt the response
+        securityInterceptor.setSecurementEncryptionUser(trustedCertAliasName)
+        securityInterceptor.setSecurementEncryptionParts("{Content}{http://www.justice.gov.uk/magistrates/external/ExternalDocumentRequest}Acknowledgement")
         securityInterceptor.setSecurementEncryptionCrypto(getCryptoFactoryBean().getObject())
 
         // sign the response
-//        securityInterceptor.setSecurementActions("Signature Encrypt")
-//        securityInterceptor.setSecurementUsername("server")
-//        securityInterceptor.setSecurementPassword("changeit")
-//        securityInterceptor.setSecurementSignatureCrypto(getCryptoFactoryBean().getObject())
+        securityInterceptor.setSecurementActions(responseActions)
+        securityInterceptor.setSecurementUsername(privateKeyAliasName)
+        securityInterceptor.setSecurementPassword(keystorePassword)
+        securityInterceptor.setSecurementSignatureCrypto(cryptoBean)
         return securityInterceptor
     }
-
 }

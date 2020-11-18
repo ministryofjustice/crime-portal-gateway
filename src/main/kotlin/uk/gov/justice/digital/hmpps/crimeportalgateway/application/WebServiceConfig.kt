@@ -10,8 +10,6 @@ import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
 import org.springframework.web.context.WebApplicationContext
 import org.springframework.ws.config.annotation.EnableWs
-import org.springframework.ws.config.annotation.WsConfigurerAdapter
-import org.springframework.ws.server.EndpointInterceptor
 import org.springframework.ws.soap.SoapVersion
 import org.springframework.ws.soap.saaj.SaajSoapMessageFactory
 import org.springframework.ws.transport.http.MessageDispatcherServlet
@@ -34,11 +32,7 @@ class WebServiceConfig(
     @Value("\${soap.target-namespace}") private val targetNamespace: String,
     @Value("\${soap.xsd-file-path}") private val xsdFilePath: String,
     @Autowired private val telemetryService: TelemetryService
-) : WsConfigurerAdapter() {
-
-    override fun addInterceptors(interceptors: MutableList<EndpointInterceptor>) {
-        interceptors.add(SoapHeaderAddressInterceptor(telemetryService))
-    }
+) {
 
     @Bean
     fun externalDocumentXsdResource(): Resource {

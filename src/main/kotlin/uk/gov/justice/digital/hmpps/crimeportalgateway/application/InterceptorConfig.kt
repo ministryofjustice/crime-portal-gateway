@@ -9,9 +9,8 @@ import uk.gov.justice.digital.hmpps.crimeportalgateway.config.SoapHeaderAddressI
 import uk.gov.justice.digital.hmpps.crimeportalgateway.service.TelemetryService
 
 @Configuration
-class InterceptorConfig(@Autowired private val securityInterceptor: Wss4jSecurityInterceptor?,
-                        @Autowired private val telemetryService: TelemetryService)
-    : WsConfigurerAdapter()  {
+class InterceptorConfig(@Autowired private val securityInterceptor: Wss4jSecurityInterceptor?, @Autowired private val telemetryService: TelemetryService) :
+    WsConfigurerAdapter() {
 
     override fun addInterceptors(interceptors: MutableList<EndpointInterceptor>) {
         interceptors.add(SoapHeaderAddressInterceptor(telemetryService))
@@ -19,5 +18,4 @@ class InterceptorConfig(@Autowired private val securityInterceptor: Wss4jSecurit
             interceptors.add(securityInterceptor)
         }
     }
-
 }
