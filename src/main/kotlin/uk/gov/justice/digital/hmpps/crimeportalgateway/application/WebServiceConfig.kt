@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.hmpps.crimeportalgateway.application
 
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.web.servlet.ServletRegistrationBean
 import org.springframework.context.ApplicationContext
@@ -9,6 +10,8 @@ import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
 import org.springframework.web.context.WebApplicationContext
 import org.springframework.ws.config.annotation.EnableWs
+import org.springframework.ws.config.annotation.WsConfigurerAdapter
+import org.springframework.ws.server.EndpointInterceptor
 import org.springframework.ws.soap.SoapVersion
 import org.springframework.ws.soap.saaj.SaajSoapMessageFactory
 import org.springframework.ws.transport.http.MessageDispatcherServlet
@@ -16,6 +19,7 @@ import org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition
 import org.springframework.ws.wsdl.wsdl11.SimpleWsdl11Definition
 import org.springframework.xml.xsd.SimpleXsdSchema
 import org.springframework.xml.xsd.XsdSchema
+import uk.gov.justice.digital.hmpps.crimeportalgateway.service.TelemetryService
 import uk.gov.justice.magistrates.external.externaldocumentrequest.ExternalDocumentRequest
 import java.io.File
 import javax.xml.XMLConstants
@@ -25,9 +29,16 @@ import javax.xml.validation.SchemaFactory
 
 @EnableWs
 @Configuration
-class WebServiceConfig(@Value("\${soap.ws-location-uri}") private val wsLocationUri: String,
-                       @Value("\${soap.target-namespace}") private val targetNamespace : String,
-                       @Value("\${soap.xsd-file-path}") private val xsdFilePath : String) {
+class WebServiceConfig(
+    @Value("\${soap.ws-location-uri}") private val wsLocationUri: String,
+    @Value("\${soap.target-namespace}") private val targetNamespace: String,
+    @Value("\${soap.xsd-file-path}") private val xsdFilePath: String,
+    @Autowired private val telemetryService: TelemetryService
+) : WsConfigurerAdapter() {
+
+    override fun addInterceptors(interceptors: MutableList<EndpointInterceptor>) {
+        interceptors.add(SoapHeaderAddressInterceptor(telemetryService))
+    }
 
     @Bean
     fun externalDocumentXsdResource(): Resource {
@@ -41,10 +52,13 @@ class WebServiceConfig(@Value("\${soap.ws-location-uri}") private val wsLocation
 
     @Bean
     fun messageDispatcherServlet(applicationContext: ApplicationContext): ServletRegistrationBean<*>? {
-        return ServletRegistrationBean(MessageDispatcherServlet(applicationContext as WebApplicationContext).apply {
-            setApplicationContext(applicationContext)
-            isTransformWsdlLocations = true
-        }, "$wsLocationUri*")
+        return ServletRegistrationBean(
+            MessageDispatcherServlet(applicationContext as WebApplicationContext).apply {
+                setApplicationContext(applicationContext)
+                isTransformWsdlLocations = true
+            },
+            "$wsLocationUri*"
+        )
     }
 
     @Bean
@@ -79,5 +93,4 @@ class WebServiceConfig(@Value("\${soap.ws-location-uri}") private val wsLocation
     fun jaxbContext(): JAXBContext {
         return JAXBContext.newInstance(ExternalDocumentRequest::class.java)
     }
-
 }
