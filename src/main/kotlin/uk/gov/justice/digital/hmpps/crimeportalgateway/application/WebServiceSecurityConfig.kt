@@ -59,6 +59,7 @@ class WebServiceSecurityConfig(
         securityInterceptor.setSecurementActions(responseActions)
         securityInterceptor.setSecurementUsername(privateKeyAliasName)
         securityInterceptor.setSecurementPassword(keystorePassword)
+        securityInterceptor.setSecurementSignatureParts("{Element}{http://www.w3.org/2003/05/soap-envelope}Body")
         securityInterceptor.setSecurementSignatureCrypto(cryptoBean)
         return securityInterceptor
     }
