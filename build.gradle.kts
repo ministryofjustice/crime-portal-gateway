@@ -43,12 +43,3 @@ xjc {
 sourceSets.named("main") {
     xjcBinding.srcDir("resources/xsd")
 }
-
-tasks.register<Copy>("copyAgentConfig") {
-    from(file("applicationinsights.json"))
-    into(file("$buildDir/libs"))
-}
-
-tasks.assemble {
-    dependsOn("copyAgentConfig")
-}
