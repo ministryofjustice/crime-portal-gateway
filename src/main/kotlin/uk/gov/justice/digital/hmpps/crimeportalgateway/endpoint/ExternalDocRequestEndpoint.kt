@@ -4,9 +4,9 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.ws.server.endpoint.annotation.Endpoint
-import org.springframework.ws.server.endpoint.annotation.PayloadRoot
 import org.springframework.ws.server.endpoint.annotation.RequestPayload
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload
+import org.springframework.ws.soap.server.endpoint.annotation.SoapAction
 import uk.gov.justice.digital.hmpps.crimeportalgateway.service.SqsService
 import uk.gov.justice.digital.hmpps.crimeportalgateway.service.TelemetryEventType
 import uk.gov.justice.digital.hmpps.crimeportalgateway.service.TelemetryService
@@ -32,7 +32,7 @@ class ExternalDocRequestEndpoint(
     @Autowired private val validationSchema: Schema?
 ) {
 
-    @PayloadRoot(namespace = NAMESPACE_URI, localPart = REQUEST_LOCAL_NAME)
+    @SoapAction("")
     @ResponsePayload
     fun processRequest(@RequestPayload request: ExternalDocumentRequest): Acknowledgement {
         log.info("Request payload received. {}", request.documents?.toString())
