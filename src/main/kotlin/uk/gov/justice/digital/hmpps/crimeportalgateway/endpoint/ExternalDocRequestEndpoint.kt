@@ -4,6 +4,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.ws.server.endpoint.annotation.Endpoint
+import org.springframework.ws.server.endpoint.annotation.PayloadRoot
 import org.springframework.ws.server.endpoint.annotation.RequestPayload
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload
 import org.springframework.ws.soap.server.endpoint.annotation.SoapAction
@@ -32,11 +33,39 @@ class ExternalDocRequestEndpoint(
     @Autowired private val validationSchema: Schema?
 ) {
 
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = REQUEST_LOCAL_NAME)
+    @ResponsePayload
+    fun processPayloadRootRequest(@RequestPayload request: ExternalDocumentRequest): Acknowledgement {
+        log.info("Request payload received to PayloadRoot mapped. {}", request.documents?.toString())
+
+        return process(request)
+    }
+
+    @SoapAction("externalDocument")
+    @ResponsePayload
+    fun processRequestExternalDocument(@RequestPayload request: ExternalDocumentRequest): Acknowledgement {
+        log.info("Request payload received to externalDocument SoapAction. {}", request.documents?.toString())
+
+        return process(request)
+    }
+
+    @SoapAction("ExternalDocument")
+    @ResponsePayload
+    fun processExternalDocument(@RequestPayload request: ExternalDocumentRequest): Acknowledgement {
+        log.info("Request payload received to externalDocument SoapAction. {}", request.documents?.toString())
+
+        return process(request)
+    }
+
     @SoapAction("")
     @ResponsePayload
     fun processRequest(@RequestPayload request: ExternalDocumentRequest): Acknowledgement {
-        log.info("Request payload received. {}", request.documents?.toString())
+        log.info("Request payload received to ExternalDocument SoapAction. {}", request.documents?.toString())
 
+        return process(request)
+    }
+
+    private fun process(request: ExternalDocumentRequest): Acknowledgement {
         when (enqueueMsgAsync) {
             true -> {
                 CompletableFuture
