@@ -49,14 +49,6 @@ class ExternalDocRequestEndpoint(
         return process(request)
     }
 
-    @SoapAction("ExternalDocument")
-    @ResponsePayload
-    fun processExternalDocument(@RequestPayload request: ExternalDocumentRequest): Acknowledgement {
-        log.info("Request payload received to externalDocument SoapAction. {}", request.documents?.toString())
-
-        return process(request)
-    }
-
     @SoapAction("")
     @ResponsePayload
     fun processRequest(@RequestPayload request: ExternalDocumentRequest): Acknowledgement {
