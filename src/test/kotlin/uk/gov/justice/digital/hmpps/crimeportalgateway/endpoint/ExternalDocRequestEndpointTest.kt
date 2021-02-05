@@ -71,19 +71,23 @@ internal class ExternalDocRequestEndpointTest {
     }
 
     @Test
-    fun `given a valid message with dummy court room then should enqueue the message and return the correct acknowledgement`() {
+    fun `given a valid message with dummy court room then should not enqueue the message and return the correct acknowledgement`() {
 
         endpoint = buildEndpoint(setOf("B10JQ"), false, 5)
-        whenever(sqsService.enqueueMessage(contains("ExternalDocumentRequest")))
-            .thenReturn("a4e9ab53-f8aa-bf2c-7291-d0293a8b0d02")
 
         val ack = endpoint.processRequest(externalDocument)
 
         assertAck(ack)
 
-        verify(telemetryService).trackEvent(TelemetryEventType.COURT_LIST_MESSAGE_RECEIVED, customDimensionsMap)
-        verify(sqsService).enqueueMessage(anyString())
-        verifyNoMoreInteractions(sqsService, telemetryService)
+        verify(telemetryService).trackEvent(
+            TelemetryEventType.COURT_LIST_MESSAGE_IGNORED,
+            mapOf(
+                "courtCode" to "B10JQ",
+                "courtRoom" to "5",
+                "fileName" to "5_26102020_2992_B10JQ05_ADULT_COURT_LIST_DAILY"
+            )
+        )
+        verifyNoMoreInteractions(telemetryService, sqsService)
     }
 
     @Test
@@ -127,7 +131,7 @@ internal class ExternalDocRequestEndpointTest {
     @Test
     fun `given async then success should the correct acknowledgement message`() {
 
-        endpoint = buildEndpoint(setOf("B10JQ"), true, 5)
+        endpoint = buildEndpoint(setOf("B10JQ"), true, 50)
 
         whenever(sqsService.enqueueMessage(contains("ExternalDocumentRequest")))
             .thenReturn("a4e9ab53-f8aa-bf2c-7291-d0293a8b0d02")

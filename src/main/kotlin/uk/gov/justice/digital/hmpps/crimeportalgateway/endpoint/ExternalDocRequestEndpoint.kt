@@ -100,7 +100,7 @@ class ExternalDocRequestEndpoint(
                 return
             }
 
-        when (includedCourts.contains(courtDetail.first) && courtDetail.second <= minDummyCourtRoom) {
+        when (includedCourts.contains(courtDetail.first) && courtDetail.second < minDummyCourtRoom) {
             true -> {
                 val sqsMessageId = sqsService.enqueueMessage(marshal(request))
                 telemetryService.trackEvent(
