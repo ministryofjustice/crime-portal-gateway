@@ -3,8 +3,8 @@ spring:
     level:
       org.springframework.web: TRACE
       org.springframework.ws: TRACE
-      org.springframework.ws.server.MessageTracing.received: TRACE
-      org.springframework.ws.server.MessageTracing.sent: TRACE
+      org.springframework.ws.server.MessageTracing.received: INFO
+      org.springframework.ws.server.MessageTracing.sent: INFO
       uk.gov.justice.digital.hmpps.crimeportalgateway.application: TRACE
 
 soap:
