@@ -6,6 +6,8 @@ spring:
       org.springframework.ws.server.MessageTracing.received: INFO
       org.springframework.ws.server.MessageTracing.sent: INFO
       uk.gov.justice.digital.hmpps.crimeportalgateway.application: TRACE
+  mvc:
+    log-request-details: true
 
 soap:
   xsd-file-path: src/main/resources/xsd/cp/external/ExternalDocumentRequest.xsd
