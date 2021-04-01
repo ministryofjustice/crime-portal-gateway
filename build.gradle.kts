@@ -1,5 +1,5 @@
 plugins {
-    id("uk.gov.justice.hmpps.gradle-spring-boot") version "3.1.1"
+    id("uk.gov.justice.hmpps.gradle-spring-boot") version "3.1.4"
     kotlin("plugin.spring") version "1.4.10"
     id("org.unbroken-dome.xjc") version "2.0.0"
     id("org.owasp.dependencycheck") version "6.0.3"
@@ -18,6 +18,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.ws:spring-ws-security") {
         exclude(group = "org.bouncycastle", module = "bcprov-jdk15on")
+            .because("OWASP found security Issues")
+        exclude(group = "org.cryptacular:cryptacular", module = "cryptacular")
             .because("OWASP found security Issues")
     }
     implementation("org.springframework.boot:spring-boot-devtools")
