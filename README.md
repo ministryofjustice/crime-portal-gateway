@@ -61,3 +61,4 @@ This command should submit the message to the local queue and will report back t
 
 There is a SOAP-UI project in src/test/resources/soap-ui/single-case-simple.xml. Import this project to SOAP-UI and run it in the normal way.
 
+
