@@ -13,7 +13,8 @@ ingress:
   enabled: true
   enable_whitelist: true
   hosts:
-    - host: crime-portal-gateway.apps.live-1.cloud-platform.service.justice.gov.uk
+      - host: crime-portal-mirror-gateway.service.justice.gov.uk
+        cert_secret: crime-portal-gateway-cert
   path: /
 
 env:
