@@ -34,7 +34,7 @@ dependencies {
     implementation("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
 
     runtimeOnly("org.apache.ws.xmlschema", "xmlschema-core", "2.2.5")
-    runtimeOnly("org.glassfish.jaxb:jaxb-runtime:2.4.0-b180830.0438")
+    runtimeOnly("org.glassfish.jaxb:jaxb-runtime:4.0.1")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
     testImplementation("org.springframework.ws:spring-ws-test:3.1.3")
