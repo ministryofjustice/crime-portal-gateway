@@ -37,7 +37,7 @@ dependencies {
     runtimeOnly("org.glassfish.jaxb:jaxb-runtime:2.4.0-b180830.0438")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
-    testImplementation("org.springframework.ws:spring-ws-test:3.1.3")
+    testImplementation("org.springframework.ws:spring-ws-test:4.0.4")
     testImplementation("org.mockito:mockito-core:5.1.1")
 }
 
