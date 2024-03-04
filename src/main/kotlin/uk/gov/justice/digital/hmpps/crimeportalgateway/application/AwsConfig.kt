@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
 import software.amazon.awssdk.regions.Region
+import software.amazon.awssdk.regions.Region.EU_WEST_2
 import software.amazon.awssdk.services.s3.S3Client
 import software.amazon.awssdk.services.sqs.SqsClient
 import java.net.URI
@@ -24,10 +25,10 @@ class AwsConfig(
     @Bean
     fun amazonSqs(): AmazonSQSExtendedClient {
         val extendedClientConfig = ExtendedClientConfiguration()
-            .withPayloadSupportEnabled(S3Client.builder().region(Region.of(regionName)).build(), bucketName)
+            .withPayloadSupportEnabled(S3Client.builder().region(EU_WEST_2).build(), bucketName)
 
         val sqsClient = SqsClient.builder()
-            .region(Region.of(regionName))
+            .region(EU_WEST_2)
             .endpointOverride(URI.create(sqsEndpointUrl))
             .build()
 
@@ -38,7 +39,7 @@ class AwsConfig(
     fun amazonS3Client(): AmazonS3 {
         return AmazonS3ClientBuilder
             .standard()
-            .withRegion(regionName)
+            .withRegion("eu-west-2")
             .build()
     }
 }

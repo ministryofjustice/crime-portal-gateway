@@ -15,6 +15,7 @@ import org.springframework.core.type.AnnotatedTypeMetadata
 import org.springframework.lang.NonNull
 import org.springframework.web.context.annotation.RequestScope
 import java.util.Optional
+import java.util.UUID
 
 @Configuration
 class TelemetryConfig {
@@ -43,6 +44,6 @@ class TelemetryConfig {
 
     @Bean
     fun getOperationId(): () -> String? {
-        return { ThreadContext.getRequestTelemetryContext()?.httpRequestTelemetry?.context?.operation?.id }
+        return { UUID.randomUUID().toString() } // { ThreadContext.getRequestTelemetryContext()?.httpRequestTelemetry?.context?.operation?.id }
     }
 }
