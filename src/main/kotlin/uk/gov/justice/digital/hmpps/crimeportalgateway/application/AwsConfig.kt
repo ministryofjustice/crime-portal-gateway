@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
-import software.amazon.awssdk.regions.Region.EU_WEST_2
+import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.s3.S3Client
 import software.amazon.awssdk.services.sqs.SqsClient
 import java.net.URI
@@ -28,12 +28,13 @@ class AwsConfig(
                 S3Client.builder()
                     .endpointOverride(URI.create(sqsEndpointUrl))
                     .forcePathStyle(true)
-                    .region(EU_WEST_2).build(),
+                    .region(Region.of(regionName))
+                    .build(),
                 bucketName
             )
 
         val sqsClient = SqsClient.builder()
-            .region(EU_WEST_2)
+            .region(Region.of(regionName))
             .endpointOverride(URI.create(sqsEndpointUrl))
             .build()
 
@@ -45,7 +46,7 @@ class AwsConfig(
         return AmazonS3ClientBuilder
             .standard()
             .withPathStyleAccessEnabled(true)
-            .withRegion("eu-west-2")
+            .withRegion(regionName)
             .build()
     }
 }
