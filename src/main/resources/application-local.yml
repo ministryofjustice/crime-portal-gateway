@@ -12,14 +12,8 @@ spring:
 soap:
   xsd-file-path: src/main/resources/xsd/cp/external/ExternalDocumentRequest.xsd
 
-# Localstack settings
+
 aws:
   sqs-endpoint-url: "http://localhost:4566"
-  region-name: eu-west-2
-  access_key: foobar
-  secret_access_key: foobar
   s3:
-    access_key: foobar
-    secret_access_key: foobar
-    access_key_id: foobar
     bucket_name: cpg-bucket
