@@ -45,13 +45,8 @@ The application requires an Amazon SQS queue and S3 bucket to be configured. It 
 
 1. Launch localstack with configured services. 
 
-```docker-compose up localstack```   
+```docker-compose up localstack```
 
-``` create AWS infrastructure
-AWS_ACCESS_KEY_ID=key AWS_SECRET_ACCESS_KEY=secret aws --endpoint-url=http://localhost:4566 s3api create-bucket --bucket cpg-bucket --region eu-west-2 --create-bucket-configuration LocationConstraint="eu-west-2"
-AWS_ACCESS_KEY_ID=key AWS_SECRET_ACCESS_KEY=secret aws sqs create-queue --queue-name=crime-portal-gateway-queue --region=eu-west-2 --endpoint-url=http://localhost:4566
-
-```
 2. Start the application
 
 ```SPRING_PROFILES_ACTIVE=local SQS_QUEUE_NAME=crime-portal-gateway-queue AWS_SECRET_ACCESS_KEY=none AWS_ACCESS_KEY_ID=none ./gradlew bootRun```
