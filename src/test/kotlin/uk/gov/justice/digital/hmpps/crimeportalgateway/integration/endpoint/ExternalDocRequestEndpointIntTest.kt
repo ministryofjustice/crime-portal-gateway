@@ -1,9 +1,12 @@
 package uk.gov.justice.digital.hmpps.crimeportalgateway.integration.endpoint
 
+import com.amazonaws.services.sns.AmazonSNS
+import com.amazonaws.services.sns.model.PublishRequest
+import com.amazonaws.services.sns.model.PublishResult
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.ArgumentMatchers.anyString
+import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.startsWith
 import org.mockito.Mockito.contains
 import org.mockito.kotlin.eq
@@ -27,7 +30,6 @@ import org.springframework.xml.transform.StringSource
 import uk.gov.justice.digital.hmpps.crimeportalgateway.application.MessagingConfigTest
 import uk.gov.justice.digital.hmpps.crimeportalgateway.integration.IntegrationTestBase
 import uk.gov.justice.digital.hmpps.crimeportalgateway.service.S3Service
-import uk.gov.justice.digital.hmpps.crimeportalgateway.service.SqsService
 import uk.gov.justice.digital.hmpps.crimeportalgateway.service.TelemetryEventType
 import uk.gov.justice.digital.hmpps.crimeportalgateway.service.TelemetryService
 import uk.gov.justice.digital.hmpps.crimeportalgateway.xml.MessageDetail
@@ -44,7 +46,7 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
     private lateinit var telemetryService: TelemetryService
 
     @Autowired
-    private lateinit var sqsService: SqsService
+    private lateinit var amazonSNS: AmazonSNS
 
     @Autowired
     private lateinit var s3Service: S3Service
@@ -60,9 +62,7 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
     fun `should enqueue message and return successful acknowledgement`() {
         val externalDoc1 = readFile("src/test/resources/soap/sample-request.xml")
         val requestEnvelope: Source = StringSource(externalDoc1)
-
-        whenever(sqsService.enqueueMessage(contains("ExternalDocumentRequest"))).thenReturn(sqsMessageId)
-
+        whenever(amazonSNS.publish(any(PublishRequest::class.java))).thenReturn(PublishResult())
         mockClient.sendRequest(RequestCreators.withSoapEnvelope(requestEnvelope))
             .andExpect(validPayload(xsdResource))
             .andExpect(
@@ -79,17 +79,17 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
         verify(telemetryService).trackEvent(
             TelemetryEventType.COURT_LIST_MESSAGE_RECEIVED,
             mapOf(
-                "sqsMessageId" to "a4e9ab53-f8aa-bf2c-7291-d0293a8b0d02",
+
                 "courtCode" to "B10JQ",
                 "courtRoom" to "0",
                 "hearingDate" to "2020-10-26",
                 "fileName" to "5_26102020_2992_B10JQ00_ADULT_COURT_LIST_DAILY"
             )
         )
-        verify(sqsService).enqueueMessage(anyString())
+
         val expectedMessageDetail = MessageDetail(courtCode = "B10JQ", courtRoom = 0, hearingDate = "2020-10-26")
         verify(s3Service).uploadMessage(eq(expectedMessageDetail), contains("ExternalDocumentRequest"))
-        verifyNoMoreInteractions(sqsService, s3Service)
+        verifyNoMoreInteractions(s3Service)
     }
 
     @Test
@@ -113,7 +113,7 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
         val expectedMessageDetail = MessageDetail(courtCode = "B10XX", courtRoom = 0, hearingDate = "2020-10-26")
         verify(s3Service).uploadMessage(eq(expectedMessageDetail), contains("ExternalDocumentRequest"))
         verifyNoMoreInteractions(s3Service)
-        verifyNoInteractions(sqsService)
+        verifyNoInteractions(amazonSNS)
     }
 
     @Test
@@ -135,7 +135,7 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
 
         verify(s3Service).uploadMessage(startsWith("fail"), contains("ExternalDocumentRequest"))
         verifyNoMoreInteractions(s3Service)
-        verifyNoInteractions(sqsService)
+        verifyNoInteractions(amazonSNS)
     }
 
     @Test
@@ -143,9 +143,8 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
         val externalDoc1 = readFile("src/test/resources/soap/sample-request.xml")
         val requestEnvelope: Source = StringSource(externalDoc1)
 
-        whenever(sqsService.enqueueMessage(contains("ExternalDocumentRequest")))
+        whenever(amazonSNS.publish(any(PublishRequest::class.java)))
             .thenThrow(IllegalArgumentException())
-
         mockClient.sendRequest(RequestCreators.withSoapEnvelope(requestEnvelope))
             .andExpect(ResponseMatchers.serverOrReceiverFault())
             .andExpect(xpath("//env:Fault/env:Code/env:Value", namespaces).exists())

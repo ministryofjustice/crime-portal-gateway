@@ -1,7 +1,6 @@
 package uk.gov.justice.digital.hmpps.crimeportalgateway.messaging
 
 import com.fasterxml.jackson.core.JsonProcessingException
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -10,7 +9,6 @@ import uk.gov.justice.digital.hmpps.crimeportalgateway.model.externaldocumentreq
 import uk.gov.justice.digital.hmpps.crimeportalgateway.model.externaldocumentrequest.ExternalDocumentRequest
 import uk.gov.justice.digital.hmpps.crimeportalgateway.model.externaldocumentrequest.Info
 import uk.gov.justice.digital.hmpps.crimeportalgateway.model.externaldocumentrequest.Session
-import uk.gov.justice.digital.hmpps.crimeportalgateway.service.SqsService
 import uk.gov.justice.digital.hmpps.crimeportalgateway.service.TelemetryService
 
 @Service
@@ -18,11 +16,9 @@ class MessageProcessor(
     @Autowired
     private val messageParser: MessageParser<ExternalDocumentRequest>,
     @Autowired
-    private val sqsService: SqsService,
+    private val messageNotifier: MessageNotifier,
     @Autowired
-    private val telemetryService: TelemetryService,
-    @Autowired
-    private val objectMapper: ObjectMapper
+    private val telemetryService: TelemetryService
 ) {
 
     @Throws(JsonProcessingException::class)
@@ -32,7 +28,7 @@ class MessageProcessor(
         val documents = externalDocumentRequest.documentWrapper.document
         trackCourtListReceipt(documents, messageId)
 
-        documents
+        return documents
             .stream()
             .flatMap { document: Document ->
                 document.data.job.sessions.stream()
@@ -45,7 +41,7 @@ class MessageProcessor(
             }
             .forEach {
                 log.debug("Sending {}", it.caseNo)
-                sqsService.enqueueMessage(objectMapper.writeValueAsString(it))
+                messageNotifier.send(it, "some-id")
             }
     }
 
