@@ -15,7 +15,7 @@ services:
       - KEYSTORE_PASSWORD=changeit
 
   localstack:
-    image: localstack/localstack:1.3
+    image: localstack/localstack:latest
     networks:
       - hmpps
     container_name: localstack
@@ -30,7 +30,6 @@ services:
       - DATA_DIR=/tmp/localstack/data
       - DOCKER_HOST=unix:///var/run/docker.sock
       - DEFAULT_REGION=eu-west-2
-      - LEGACY_DIRECTORIES=1
     volumes:
       - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
