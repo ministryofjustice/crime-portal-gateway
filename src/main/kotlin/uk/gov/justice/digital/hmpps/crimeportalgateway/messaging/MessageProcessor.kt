@@ -1,6 +1,7 @@
 package uk.gov.justice.digital.hmpps.crimeportalgateway.messaging
 
 import com.fasterxml.jackson.core.JsonProcessingException
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -19,7 +20,9 @@ class MessageProcessor(
     @Autowired
     private val sqsService: SqsService,
     @Autowired
-    private val telemetryService: TelemetryService
+    private val telemetryService: TelemetryService,
+    @Autowired
+    private val objectMapper: ObjectMapper
 ) {
 
     @Throws(JsonProcessingException::class)
@@ -42,7 +45,7 @@ class MessageProcessor(
             }
             .forEach {
                 log.debug("Sending {}", it.caseNo)
-                sqsService.enqueueMessage(it.toString())
+                sqsService.enqueueMessage(objectMapper.writeValueAsString(it))
             }
     }
 
