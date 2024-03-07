@@ -17,6 +17,7 @@ import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import org.springframework.core.io.DefaultResourceLoader
 import org.springframework.core.io.ResourceLoader
+import uk.gov.justice.digital.hmpps.crimeportalgateway.messaging.MessageProcessor
 import uk.gov.justice.digital.hmpps.crimeportalgateway.service.S3Service
 import uk.gov.justice.digital.hmpps.crimeportalgateway.service.SqsService
 import uk.gov.justice.digital.hmpps.crimeportalgateway.service.TelemetryEventType
@@ -46,6 +47,9 @@ internal class ExternalDocRequestEndpointTest {
 
     @Mock
     private lateinit var s3Service: S3Service
+
+    @Mock
+    private lateinit var messageProcessor: MessageProcessor
 
     private lateinit var endpoint: ExternalDocRequestEndpoint
 
@@ -181,7 +185,8 @@ internal class ExternalDocRequestEndpointTest {
             sqsService = sqsService,
             jaxbContext = jaxbContext,
             validationSchema = schema,
-            s3Service = s3Service
+            s3Service = s3Service,
+            messageProcessor = messageProcessor
         )
     }
 

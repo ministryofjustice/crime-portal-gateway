@@ -34,6 +34,8 @@ dependencies {
 
     implementation("wsdl4j:wsdl4j:1.6.3")
     implementation("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
+    // Spring uses 2.11.4 - using 2.12.3 breaks Spring.
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.4")
 
     runtimeOnly("org.apache.ws.xmlschema", "xmlschema-core", "2.2.5")
     runtimeOnly("org.glassfish.jaxb:jaxb-runtime:2.4.0-b180830.0438")

@@ -8,6 +8,7 @@ import org.springframework.ws.server.endpoint.annotation.PayloadRoot
 import org.springframework.ws.server.endpoint.annotation.RequestPayload
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload
 import org.springframework.ws.soap.server.endpoint.annotation.SoapAction
+import uk.gov.justice.digital.hmpps.crimeportalgateway.messaging.MessageProcessor
 import uk.gov.justice.digital.hmpps.crimeportalgateway.service.S3Service
 import uk.gov.justice.digital.hmpps.crimeportalgateway.service.SqsService
 import uk.gov.justice.digital.hmpps.crimeportalgateway.service.TelemetryEventType
@@ -41,7 +42,8 @@ class ExternalDocRequestEndpoint(
     @Autowired private val sqsService: SqsService,
     @Autowired private val s3Service: S3Service,
     @Autowired private val jaxbContext: JAXBContext,
-    @Autowired private val validationSchema: Schema?
+    @Autowired private val validationSchema: Schema?,
+    @Autowired private val messageProcessor: MessageProcessor
 ) {
 
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = REQUEST_LOCAL_NAME)
@@ -111,34 +113,35 @@ class ExternalDocRequestEndpoint(
         val messageContent = marshal(request)
         s3Service.uploadMessage(messageDetail, messageContent)
         // split here
+        messageProcessor.process(messageContent, "some-id")
         // loop over split messages and send to SNS
-        when (includedCourts.contains(messageDetail.courtCode) && messageDetail.courtRoom < minDummyCourtRoom) {
-            true -> {
-                val sqsMessageId = sqsService.enqueueMessage(messageContent)
-                telemetryService.trackEvent(
-                    TelemetryEventType.COURT_LIST_MESSAGE_RECEIVED,
-                    mapOf(
-                        SQS_MESSAGE_ID_LABEL to sqsMessageId,
-                        COURT_CODE_LABEL to messageDetail.courtCode,
-                        COURT_ROOM_LABEL to messageDetail.courtRoom.toString(),
-                        HEARING_DATE_LABEL to messageDetail.hearingDate,
-                        FILENAME_LABEL to fileName
-                    )
-                )
-                log.info(String.format(SUCCESS_MESSAGE_COMMENT, messageDetail.courtCode, messageDetail.courtRoom, sqsMessageId))
-            }
-            false -> {
-                log.info(String.format(IGNORED_MESSAGE_UNKNOWN_COURT, messageDetail.courtCode, messageDetail.courtRoom))
-                telemetryService.trackEvent(
-                    TelemetryEventType.COURT_LIST_MESSAGE_IGNORED,
-                    mapOf(
-                        COURT_CODE_LABEL to messageDetail.courtCode,
-                        COURT_ROOM_LABEL to messageDetail.courtRoom.toString(),
-                        FILENAME_LABEL to fileName
-                    )
-                )
-            }
-        }
+//        when (includedCourts.contains(messageDetail.courtCode) && messageDetail.courtRoom < minDummyCourtRoom) {
+//            true -> {
+//                val sqsMessageId = sqsService.enqueueMessage(messageContent)
+//                telemetryService.trackEvent(
+//                    TelemetryEventType.COURT_LIST_MESSAGE_RECEIVED,
+//                    mapOf(
+//                        SQS_MESSAGE_ID_LABEL to sqsMessageId,
+//                        COURT_CODE_LABEL to messageDetail.courtCode,
+//                        COURT_ROOM_LABEL to messageDetail.courtRoom.toString(),
+//                        HEARING_DATE_LABEL to messageDetail.hearingDate,
+//                        FILENAME_LABEL to fileName
+//                    )
+//                )
+//                log.info(String.format(SUCCESS_MESSAGE_COMMENT, messageDetail.courtCode, messageDetail.courtRoom, sqsMessageId))
+//            }
+//            false -> {
+//                log.info(String.format(IGNORED_MESSAGE_UNKNOWN_COURT, messageDetail.courtCode, messageDetail.courtRoom))
+//                telemetryService.trackEvent(
+//                    TelemetryEventType.COURT_LIST_MESSAGE_IGNORED,
+//                    mapOf(
+//                        COURT_CODE_LABEL to messageDetail.courtCode,
+//                        COURT_ROOM_LABEL to messageDetail.courtRoom.toString(),
+//                        FILENAME_LABEL to fileName
+//                    )
+//                )
+//            }
+//        }
     }
 
     private fun marshal(request: ExternalDocumentRequest, validate: Boolean = true): String {

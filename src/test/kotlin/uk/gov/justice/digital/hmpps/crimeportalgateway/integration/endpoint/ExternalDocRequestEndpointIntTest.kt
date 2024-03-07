@@ -152,7 +152,6 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
 
         val expectedMessageDetail = MessageDetail(courtCode = "B10JQ", courtRoom = 0, hearingDate = "2020-10-26")
         verify(s3Service).uploadMessage(eq(expectedMessageDetail), contains("ExternalDocumentRequest"))
-
     }
 
     fun readFile(fileName: String): String = File(fileName).readText(Charsets.UTF_8)
