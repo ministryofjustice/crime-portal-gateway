@@ -109,6 +109,9 @@ class ExternalDocRequestEndpoint(
             }
 
         val messageContent = marshal(request)
+        s3Service.uploadMessage(messageDetail, messageContent)
+        // split here
+        // loop over split messages and send to SNS
         when (includedCourts.contains(messageDetail.courtCode) && messageDetail.courtRoom < minDummyCourtRoom) {
             true -> {
                 val sqsMessageId = sqsService.enqueueMessage(messageContent)
@@ -136,8 +139,6 @@ class ExternalDocRequestEndpoint(
                 )
             }
         }
-
-        s3Service.uploadMessage(messageDetail, messageContent)
     }
 
     private fun marshal(request: ExternalDocumentRequest, validate: Boolean = true): String {
