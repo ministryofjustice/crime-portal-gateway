@@ -13,6 +13,8 @@ management.endpoint:
 # Default access key and secret_access_key are for SQS
 aws:
   region-name: eu-west-2
+  sns:
+    court-case-events-topic: "arn:aws:sns:eu-west-2:000000000000:court-case-events-topic"
   endpoint-url: "http://localhost:4566"
   access_key: foobar
   secret_access_key: foobar

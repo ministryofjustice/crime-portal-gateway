@@ -21,7 +21,7 @@ class MessageNotifier(
     private val telemetryService: TelemetryService,
     @Autowired
     private val amazonSNSClient: AmazonSNS,
-    @Value("arn:aws:sns:eu-west-2:000000000000:court-case-events-topic")
+    @Value("\${aws.sns.court-case-events-topic}")
     private val topicArn: String
 ) {
     fun send(case: Case, messageId: String) {
