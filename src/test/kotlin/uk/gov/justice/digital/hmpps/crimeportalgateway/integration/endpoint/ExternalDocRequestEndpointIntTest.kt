@@ -67,6 +67,7 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
 
         val expectedMessageDetail = MessageDetail(courtCode = "B10JQ", courtRoom = 0, hearingDate = "2020-10-26")
 
+
         // possibly check S3 upload
         // definitely get sqs message
     }
