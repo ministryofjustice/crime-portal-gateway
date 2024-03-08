@@ -28,7 +28,7 @@ dependencies {
     }
     implementation("org.springframework.boot:spring-boot-starter-web-services")
     implementation("com.microsoft.azure:applicationinsights-spring-boot-starter:2.6.4")
-    implementation("com.amazonaws:aws-java-sdk-sqs:$awsSdkVersion")
+
     implementation("com.amazonaws:aws-java-sdk-s3:$awsSdkVersion")
     implementation("com.amazonaws:aws-java-sdk-sts:$awsSdkVersion")
     implementation("com.amazonaws:aws-java-sdk-sns:$awsSdkVersion")
@@ -44,6 +44,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
     testImplementation("org.springframework.ws:spring-ws-test:3.1.3")
     testImplementation("org.mockito:mockito-core:5.1.1")
+    testImplementation("com.amazonaws:aws-java-sdk-sqs:$awsSdkVersion")
 }
 
 xjc {
