@@ -20,7 +20,6 @@ class AwsConfig : BaseAwsConfig() {
 
     @Bean
     fun amazonSNSClient(): AmazonSNS {
-        println("AWS client")
         return AmazonSNSClientBuilder
             .standard()
             .withRegion(regionName)

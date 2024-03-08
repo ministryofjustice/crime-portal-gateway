@@ -16,7 +16,7 @@ var awsSdkVersion = "1.12.543"
 dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-webflux")
+
     implementation("org.springframework.ws:spring-ws-security:4.0.1") {
         exclude(group = "org.bouncycastle", module = "bcprov-jdk15on")
             .because("OWASP found security Issues")
@@ -30,7 +30,6 @@ dependencies {
     implementation("com.microsoft.azure:applicationinsights-spring-boot-starter:2.6.4")
 
     implementation("com.amazonaws:aws-java-sdk-s3:$awsSdkVersion")
-    implementation("com.amazonaws:aws-java-sdk-sts:$awsSdkVersion")
     implementation("com.amazonaws:aws-java-sdk-sns:$awsSdkVersion")
 
     implementation("wsdl4j:wsdl4j:1.6.3")
@@ -42,6 +41,7 @@ dependencies {
     runtimeOnly("org.glassfish.jaxb:jaxb-runtime:2.4.0-b180830.0438")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
+    testImplementation("org.springframework.boot:spring-boot-starter-webflux")
     testImplementation("org.springframework.ws:spring-ws-test:3.1.3")
     testImplementation("org.mockito:mockito-core:5.1.1")
     testImplementation("com.amazonaws:aws-java-sdk-sqs:$awsSdkVersion")

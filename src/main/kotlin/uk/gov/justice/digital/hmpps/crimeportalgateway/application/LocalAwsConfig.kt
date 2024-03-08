@@ -14,8 +14,8 @@ import org.springframework.context.annotation.Profile
 @Configuration
 class LocalAwsConfig : BaseAwsConfig() {
 
-    @Value("\${aws.sqs-endpoint-url}")
-    lateinit var snsEndpointUrl: String
+    @Value("\${aws.localstack-endpoint-url}")
+    lateinit var endpointUrl: String
 
     @Bean
     fun amazonS3LocalStackClient(): AmazonS3 {
@@ -27,8 +27,7 @@ class LocalAwsConfig : BaseAwsConfig() {
 
     @Bean
     fun amazonSNSLocalStackClient(): AmazonSNS {
-        println("Localstack client")
-        val endpointConfiguration = AwsClientBuilder.EndpointConfiguration(snsEndpointUrl, regionName)
+        val endpointConfiguration = AwsClientBuilder.EndpointConfiguration(endpointUrl, regionName)
 
         return AmazonSNSClientBuilder
             .standard()
