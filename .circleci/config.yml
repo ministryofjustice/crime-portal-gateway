@@ -9,9 +9,9 @@ orbs:
 jobs:
   validate:
     executor:
-    name: hmpps/localstack
-    jdk_tag: "17.0"
-    localstack_tag: "3"
+      name: hmpps/localstack
+      jdk_tag: "21.0"
+      localstack_tag: "3"
     steps:
       - checkout
       - restore_cache:
