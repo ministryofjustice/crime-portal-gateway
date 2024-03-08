@@ -3,13 +3,13 @@ package uk.gov.justice.digital.hmpps.crimeportalgateway.integration.health
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.context.annotation.Import
-import uk.gov.justice.digital.hmpps.crimeportalgateway.application.MessagingConfigTest
+import uk.gov.justice.digital.hmpps.crimeportalgateway.application.TestMessagingConfig
 import uk.gov.justice.digital.hmpps.crimeportalgateway.integration.IntegrationTestBase
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.function.Consumer
 
-@Import(MessagingConfigTest::class)
+@Import(TestMessagingConfig::class)
 class HealthCheckTest : IntegrationTestBase() {
 
     @Test

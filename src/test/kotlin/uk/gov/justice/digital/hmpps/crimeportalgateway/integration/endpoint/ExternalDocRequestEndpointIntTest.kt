@@ -27,7 +27,7 @@ import org.springframework.ws.test.server.ResponseMatchers.noFault
 import org.springframework.ws.test.server.ResponseMatchers.validPayload
 import org.springframework.ws.test.server.ResponseMatchers.xpath
 import org.springframework.xml.transform.StringSource
-import uk.gov.justice.digital.hmpps.crimeportalgateway.application.MessagingConfigTest
+import uk.gov.justice.digital.hmpps.crimeportalgateway.application.TestMessagingConfig
 import uk.gov.justice.digital.hmpps.crimeportalgateway.integration.IntegrationTestBase
 import uk.gov.justice.digital.hmpps.crimeportalgateway.service.S3Service
 import uk.gov.justice.digital.hmpps.crimeportalgateway.service.TelemetryEventType
@@ -36,7 +36,7 @@ import uk.gov.justice.digital.hmpps.crimeportalgateway.xml.MessageDetail
 import java.io.File
 import javax.xml.transform.Source
 
-@Import(MessagingConfigTest::class)
+@Import(TestMessagingConfig::class)
 class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
 
     @Autowired
