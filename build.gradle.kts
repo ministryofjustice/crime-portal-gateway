@@ -40,6 +40,8 @@ dependencies {
     runtimeOnly("org.apache.ws.xmlschema", "xmlschema-core", "2.2.5")
     runtimeOnly("org.glassfish.jaxb:jaxb-runtime:2.4.0-b180830.0438")
 
+    testImplementation("org.testcontainers:localstack:1.19.6")
+    testImplementation("org.testcontainers:junit-jupiter:1.19.6")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
     testImplementation("org.springframework.boot:spring-boot-starter-webflux")
     testImplementation("org.springframework.ws:spring-ws-test:3.1.3")

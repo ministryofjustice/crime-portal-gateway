@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Profile
 import java.util.UUID
 
-@Profile(value = ["test", "local"])
+@Profile("local")
 class LocalTelemetryConfig : BaseTelemetryConfig() {
 
     @Bean
