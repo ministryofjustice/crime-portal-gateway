@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.model.S3ObjectSummary
 import com.amazonaws.services.sns.AmazonSNS
 import com.amazonaws.services.sns.util.Topics
 import com.amazonaws.services.sqs.AmazonSQS
+import com.amazonaws.services.sqs.model.Message
 import com.amazonaws.services.sqs.model.ReceiveMessageRequest
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -30,7 +31,6 @@ import org.testcontainers.containers.localstack.LocalStackContainer
 import uk.gov.justice.digital.hmpps.crimeportalgateway.integration.IntegrationTestBase
 import uk.gov.justice.digital.hmpps.crimeportalgateway.service.TelemetryEventType
 import uk.gov.justice.digital.hmpps.crimeportalgateway.service.TelemetryService
-import uk.gov.justice.digital.hmpps.crimeportalgateway.xml.MessageDetail
 import java.io.File
 import javax.xml.transform.Source
 
@@ -99,7 +99,7 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
     }
 
     @Test
-    fun `should send SQS message`() {
+    fun `should send SQS message for each case`() {
         val externalDoc1 = readFile("src/test/resources/soap/sample-request.xml")
         val requestEnvelope: Source = StringSource(externalDoc1)
         mockClient.sendRequest(RequestCreators.withSoapEnvelope(requestEnvelope))
@@ -126,15 +126,15 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
             )
         )
 
-        val expectedMessageDetail = MessageDetail(courtCode = "B10JQ", courtRoom = 0, hearingDate = "2020-10-26")
-        val message = amazonSQS.receiveMessage(ReceiveMessageRequest(queueUrl))
-
-        val messageBody = objectMapper.readValue(message.messages.firstOrNull()?.body, SQSMessage::class.java)
-        val case = objectMapper.readValue(messageBody.message, CaseDetails::class.java)
-        assertThat(case.caseId).isEqualTo(1218461)
+        checkMessage(amazonSQS.receiveMessage(ReceiveMessageRequest(queueUrl)).messages[0], 166662981)
+        checkMessage(amazonSQS.receiveMessage(ReceiveMessageRequest(queueUrl)).messages[0], 1777732980)
         // possibly check S3 upload
+    }
 
-        // definitely get sqs message
+    private fun checkMessage(message: Message, caseNo: Int) {
+        val messageBody = objectMapper.readValue(message.body, SQSMessage::class.java)
+        val case = objectMapper.readValue(messageBody.message, CaseDetails::class.java)
+        assertThat(case.caseNo).isEqualTo(caseNo)
     }
 
     @Test
@@ -210,5 +210,5 @@ data class SQSMessage(
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class CaseDetails(
 
-    val caseId: Int
+    val caseNo: Int
 )
