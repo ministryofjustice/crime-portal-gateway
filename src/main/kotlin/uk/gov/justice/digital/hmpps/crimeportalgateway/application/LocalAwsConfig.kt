@@ -28,6 +28,7 @@ class LocalAwsConfig : BaseAwsConfig() {
         return AmazonS3ClientBuilder
             .standard()
             .withEndpointConfiguration(endpointConfiguration)
+            .withPathStyleAccessEnabled(true)
             .withCredentials(StaticCredentialsProvider(BasicAWSCredentials("any", "any")))
             .build()
     }
