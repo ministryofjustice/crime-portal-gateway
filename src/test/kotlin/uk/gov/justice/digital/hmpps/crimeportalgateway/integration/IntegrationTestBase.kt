@@ -37,7 +37,7 @@ abstract class IntegrationTestBase {
         mockClient = MockWebServiceClient.createClient(applicationContext)
     }
     companion object {
-        private val localStackContainer = LocalStackHelper.instance
+        val localStackContainer = LocalStackHelper.instance
 
         @JvmStatic
         @DynamicPropertySource
