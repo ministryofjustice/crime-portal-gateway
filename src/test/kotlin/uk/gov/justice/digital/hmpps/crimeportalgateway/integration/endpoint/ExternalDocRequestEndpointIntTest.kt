@@ -6,6 +6,11 @@ import com.amazonaws.services.s3.model.S3ObjectSummary
 import com.amazonaws.services.sns.AmazonSNS
 import com.amazonaws.services.sns.util.Topics
 import com.amazonaws.services.sqs.AmazonSQS
+import com.amazonaws.services.sqs.model.ReceiveMessageRequest
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
@@ -49,6 +54,9 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
     @Value("\${aws.s3.bucket_name}")
     lateinit var bucketName: String
 
+    @Autowired
+    lateinit var objectMapper: ObjectMapper
+
     lateinit var queueUrl: String
 
     @BeforeEach
@@ -58,14 +66,14 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
         // using the spring-boot-2 branch as upgrading to Spring boot 3 brings in far reaching changes
         val topic = amazonSNS.createTopic(topicName)
         val queue = amazonSQS.createQueue("court-case-events-queue")
-        queueUrl = queue.queueUrl
         val localstackUrl = localStackContainer?.getEndpointOverride(LocalStackContainer.Service.SNS).toString()
+        queueUrl = queue.queueUrl.replace("http://sqs.eu-west-2.localhost:4566", localstackUrl)
 
         Topics.subscribeQueue(
             amazonSNS,
             amazonSQS,
             topic.topicArn,
-            queueUrl.replace("http://sqs.eu-west-2.localhost:4566", localstackUrl)
+            queueUrl
         )
         amazonS3.createBucket(bucketName, "eu-west-2")
     }
@@ -91,7 +99,7 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
     }
 
     @Test
-    fun `should enqueue message and return successful acknowledgement`() {
+    fun `should send SQS message`() {
         val externalDoc1 = readFile("src/test/resources/soap/sample-request.xml")
         val requestEnvelope: Source = StringSource(externalDoc1)
         mockClient.sendRequest(RequestCreators.withSoapEnvelope(requestEnvelope))
@@ -119,8 +127,11 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
         )
 
         val expectedMessageDetail = MessageDetail(courtCode = "B10JQ", courtRoom = 0, hearingDate = "2020-10-26")
-        // val message = amazonSQS.receiveMessage(ReceiveMessageRequest(queueUrl))
+        val message = amazonSQS.receiveMessage(ReceiveMessageRequest(queueUrl))
 
+        val messageBody = objectMapper.readValue(message.messages.firstOrNull()?.body, SQSMessage::class.java)
+        val case = objectMapper.readValue(messageBody.message, CaseDetails::class.java)
+        assertThat(case.caseId).isEqualTo(1218461)
         // possibly check S3 upload
 
         // definitely get sqs message
@@ -188,3 +199,16 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
         }
     }
 }
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class SQSMessage(
+
+    @JsonProperty("Message")
+    val message: String
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class CaseDetails(
+
+    val caseId: Int
+)
