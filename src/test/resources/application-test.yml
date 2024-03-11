@@ -16,6 +16,7 @@ aws:
   region-name: eu-west-2
   sns:
     court-case-events-topic: "arn:aws:sns:eu-west-2:000000000000:court-case-events-topic"
+    court-case-events-topic-name: "court-case-events-topic"
   endpoint-url: "http://localhost:4566"
   s3:
     bucket_name: cpg-bucket

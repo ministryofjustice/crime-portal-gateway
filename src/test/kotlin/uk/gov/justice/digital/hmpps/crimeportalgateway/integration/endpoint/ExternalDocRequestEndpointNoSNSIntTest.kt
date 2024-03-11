@@ -3,17 +3,13 @@ package uk.gov.justice.digital.hmpps.crimeportalgateway.integration.endpoint
 import com.amazonaws.services.sns.AmazonSNS
 import com.amazonaws.services.sns.model.PublishRequest
 import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.any
 import org.mockito.kotlin.whenever
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.context.ApplicationContext
 import org.springframework.core.io.DefaultResourceLoader
 import org.springframework.core.io.Resource
 import org.springframework.core.io.ResourceLoader
-import org.springframework.ws.test.server.MockWebServiceClient
 import org.springframework.ws.test.server.RequestCreators
 import org.springframework.ws.test.server.ResponseMatchers
 import org.springframework.ws.test.server.ResponseMatchers.xpath
@@ -24,18 +20,8 @@ import javax.xml.transform.Source
 
 class ExternalDocRequestEndpointNoSNSIntTest : IntegrationTestBase() {
 
-    @Autowired
-    private lateinit var applicationContext: ApplicationContext
-
     @MockBean
     private lateinit var amazonSNS: AmazonSNS
-
-    private lateinit var mockClient: MockWebServiceClient
-
-    @BeforeEach
-    fun before() {
-        mockClient = MockWebServiceClient.createClient(applicationContext)
-    }
 
     @Test
     fun `given no SNS available then SOAP Fault`() {

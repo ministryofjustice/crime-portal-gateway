@@ -1,15 +1,15 @@
 package uk.gov.justice.digital.hmpps.crimeportalgateway.integration.endpoint
 
+import com.amazonaws.services.sns.AmazonSNS
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.verify
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.ApplicationContext
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.io.DefaultResourceLoader
 import org.springframework.core.io.Resource
 import org.springframework.core.io.ResourceLoader
-import org.springframework.ws.test.server.MockWebServiceClient
 import org.springframework.ws.test.server.RequestCreators
 import org.springframework.ws.test.server.ResponseMatchers.noFault
 import org.springframework.ws.test.server.ResponseMatchers.validPayload
@@ -25,16 +25,17 @@ import javax.xml.transform.Source
 class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
 
     @Autowired
-    private lateinit var applicationContext: ApplicationContext
-
-    @Autowired
     private lateinit var telemetryService: TelemetryService
 
-    private lateinit var mockClient: MockWebServiceClient
+    @Autowired
+    lateinit var amazonSNS: AmazonSNS
+
+    @Value("\${aws.sns.court-case-events-topic-name}")
+    lateinit var topicName: String
 
     @BeforeEach
-    fun before() {
-        mockClient = MockWebServiceClient.createClient(applicationContext)
+    fun beforeEach() {
+        amazonSNS.createTopic(topicName)
     }
 
     @Test
