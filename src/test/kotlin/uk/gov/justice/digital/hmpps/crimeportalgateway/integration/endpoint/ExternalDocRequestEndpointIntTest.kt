@@ -80,8 +80,8 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
 
     @AfterEach
     fun afterEach() {
-        // :-(
-        // is the s3 upload even required? Nothinbg appears to read it
+        // :-( deleting everything in the S3 bucket
+        // is the s3 upload even required? Nothing appears to read it
         var objectListing: ObjectListing = amazonS3.listObjects(bucketName)
         while (true) {
             val objIter: Iterator<S3ObjectSummary> = objectListing.objectSummaries.iterator()
@@ -131,12 +131,6 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
         // possibly check S3 upload
     }
 
-    private fun checkMessage(message: Message, caseNo: Int) {
-        val messageBody = objectMapper.readValue(message.body, SQSMessage::class.java)
-        val case = objectMapper.readValue(messageBody.message, CaseDetails::class.java)
-        assertThat(case.caseNo).isEqualTo(caseNo)
-    }
-
     @Test
     fun `should not enqueue message when court is not processed but return acknowledgement`() {
         val externalDoc1 = readFile("src/test/resources/soap/ignored-courts.xml")
@@ -156,7 +150,8 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
             .andExpect(noFault())
 
         // possibly check S3 upload
-        // check no message on queue
+        val numberOfMessagesOnQueue = countMessagesOnQueue()
+        assertThat(numberOfMessagesOnQueue).isEqualTo("0")
     }
 
     @Test
@@ -176,11 +171,20 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
             .andExpect(xpath("//ns3:Acknowledgement/Ack/TimeStamp", namespaces).exists())
             .andExpect(noFault())
 
+        val numberOfMessagesOnQueue = countMessagesOnQueue()
+        assertThat(numberOfMessagesOnQueue).isEqualTo("0")
         // possibly check S3 upload
-        // check no message on queue
     }
 
-    fun readFile(fileName: String): String = File(fileName).readText(Charsets.UTF_8)
+    private fun countMessagesOnQueue() = amazonSQS.getQueueAttributes(queueUrl, listOf("ApproximateNumberOfMessages")).attributes["ApproximateNumberOfMessages"]
+
+    private fun readFile(fileName: String): String = File(fileName).readText(Charsets.UTF_8)
+
+    private fun checkMessage(message: Message, caseNo: Int) {
+        val messageBody = objectMapper.readValue(message.body, SQSMessage::class.java)
+        val case = objectMapper.readValue(messageBody.message, CaseDetails::class.java)
+        assertThat(case.caseNo).isEqualTo(caseNo)
+    }
 
     companion object {
 
