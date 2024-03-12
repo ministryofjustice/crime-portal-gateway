@@ -129,7 +129,7 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
         checkMessage(firstCase)
         val secondCase = CaseDetails(caseNo = 1777732980, defendantName = "Mr Theremin MELLOTRON", pnc = "20120052494Q", cro = "CR0006200062")
         checkMessage(secondCase)
-        // possibly check S3 upload
+        checkS3Upload()
     }
 
     @Test
@@ -150,8 +150,8 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
             .andExpect(xpath("//ns3:Acknowledgement/Ack/TimeStamp", namespaces).exists())
             .andExpect(noFault())
 
-        // possibly check S3 upload
         checkMessagesOnQueue(0)
+        checkS3Upload()
     }
 
     @Test
@@ -172,12 +172,18 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
             .andExpect(noFault())
 
         checkMessagesOnQueue(0)
-        // possibly check S3 upload
+        checkS3Upload()
     }
 
     private fun checkMessagesOnQueue(count: Int) {
         val numberOfMessagesOnQueue = amazonSQS.getQueueAttributes(queueUrl, listOf("ApproximateNumberOfMessages")).attributes["ApproximateNumberOfMessages"]
         assertThat(numberOfMessagesOnQueue).isEqualTo("$count")
+    }
+
+    private fun checkS3Upload() {
+        val items = amazonS3.listObjects(bucketName).objectSummaries
+        assertThat(items.size).isEqualTo(1)
+        assertThat(items[0].key.startsWith("2020-10-26-B10XX-0"))
     }
 
     private fun readFile(fileName: String): String = File(fileName).readText(Charsets.UTF_8)
