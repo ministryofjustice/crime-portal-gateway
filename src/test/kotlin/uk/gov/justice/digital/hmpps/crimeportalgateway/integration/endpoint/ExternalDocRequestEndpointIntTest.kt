@@ -63,7 +63,7 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
     fun beforeEach() {
         // this is all a bit horrible, using an old version of AWS SDK
         // would be best to bring in https://github.com/ministryofjustice/hmpps-spring-boot-sqs
-        // using the spring-boot-2 branch as upgrading to Spring boot 3 brings in far reaching changes
+        // using the spring-boot-2 branch as upgrading to Spring boot 3 brings in far-reaching changes
         val topic = amazonSNS.createTopic(topicName)
         val queue = amazonSQS.createQueue("court-case-events-queue")
         val localstackUrl = localStackContainer?.getEndpointOverride(LocalStackContainer.Service.SNS).toString()
@@ -126,8 +126,8 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
             )
         )
 
-        checkMessage(amazonSQS.receiveMessage(ReceiveMessageRequest(queueUrl)).messages[0], 166662981)
-        checkMessage(amazonSQS.receiveMessage(ReceiveMessageRequest(queueUrl)).messages[0], 1777732980)
+        checkMessage(amazonSQS.receiveMessage(ReceiveMessageRequest(queueUrl)).messages[0], CaseDetails(166662981))
+        checkMessage(amazonSQS.receiveMessage(ReceiveMessageRequest(queueUrl)).messages[0], CaseDetails(1777732980))
         // possibly check S3 upload
     }
 
@@ -180,10 +180,10 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
 
     private fun readFile(fileName: String): String = File(fileName).readText(Charsets.UTF_8)
 
-    private fun checkMessage(message: Message, caseNo: Int) {
+    private fun checkMessage(message: Message, expectedCase: CaseDetails) {
         val messageBody = objectMapper.readValue(message.body, SQSMessage::class.java)
-        val case = objectMapper.readValue(messageBody.message, CaseDetails::class.java)
-        assertThat(case.caseNo).isEqualTo(caseNo)
+        val actualCase = objectMapper.readValue(messageBody.message, CaseDetails::class.java)
+        assertThat(actualCase).isEqualTo(expectedCase)
     }
 
     companion object {
