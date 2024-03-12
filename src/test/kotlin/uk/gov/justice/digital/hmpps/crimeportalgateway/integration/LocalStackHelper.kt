@@ -18,8 +18,8 @@ object LocalStackHelper {
         registry.add("aws.region-name") { localStackContainer.region }
     }
 
-    private fun startLocalstackIfNotRunning(): LocalStackContainer? {
-        if (localstackIsRunning()) return null
+    private fun startLocalstackIfNotRunning(): LocalStackContainer {
+        if (localstackIsRunning()) throw RuntimeException("Localstack is already running, please stop it")
         val logConsumer = Slf4jLogConsumer(log).withPrefix("localstack")
         return LocalStackContainer(
             DockerImageName.parse("localstack/localstack").withTag("3.0")
