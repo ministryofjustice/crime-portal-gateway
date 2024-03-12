@@ -11,6 +11,7 @@ import org.springframework.ws.soap.server.endpoint.annotation.SoapAction
 import uk.gov.justice.digital.hmpps.crimeportalgateway.messaging.MessageProcessor
 import uk.gov.justice.digital.hmpps.crimeportalgateway.service.S3Service
 import uk.gov.justice.digital.hmpps.crimeportalgateway.service.TelemetryEventType
+import uk.gov.justice.digital.hmpps.crimeportalgateway.service.TelemetryEventType.COURT_LIST_MESSAGE_RECEIVED
 import uk.gov.justice.digital.hmpps.crimeportalgateway.service.TelemetryService
 import uk.gov.justice.digital.hmpps.crimeportalgateway.xml.DocumentUtils
 import uk.gov.justice.magistrates.ack.AckType
@@ -25,7 +26,6 @@ import javax.xml.bind.JAXBContext
 import javax.xml.bind.Marshaller
 import javax.xml.validation.Schema
 
-private const val SQS_MESSAGE_ID_LABEL = "sqsMessageId"
 private const val COURT_CODE_LABEL = "courtCode"
 private const val COURT_ROOM_LABEL = "courtRoom"
 private const val HEARING_DATE_LABEL = "hearingDate"
@@ -113,19 +113,17 @@ class ExternalDocRequestEndpoint(
 
         when (includedCourts.contains(messageDetail.courtCode) && messageDetail.courtRoom < minDummyCourtRoom) {
             true -> {
-                messageProcessor.process(messageContent, "some-id")
+                messageProcessor.process(messageContent)
                 telemetryService.trackEvent(
-                    TelemetryEventType.COURT_LIST_MESSAGE_RECEIVED,
+                    COURT_LIST_MESSAGE_RECEIVED,
                     mapOf(
-                        // SQS_MESSAGE_ID_LABEL to sqsMessageId, could return publishResult.messageId but there will be a list
                         COURT_CODE_LABEL to messageDetail.courtCode,
                         COURT_ROOM_LABEL to messageDetail.courtRoom.toString(),
                         HEARING_DATE_LABEL to messageDetail.hearingDate,
                         FILENAME_LABEL to fileName
                     )
                 )
-                log.info(String.format(SUCCESS_MESSAGE_COMMENT, messageDetail.courtCode, messageDetail.courtRoom, "sqsMessageId"))
-                // TODO again see about logging all message IDs or drop this
+                log.info(String.format(SUCCESS_MESSAGE_COMMENT, messageDetail.courtCode, messageDetail.courtRoom))
             }
             false -> {
                 log.info(String.format(IGNORED_MESSAGE_UNKNOWN_COURT, messageDetail.courtCode, messageDetail.courtRoom))
@@ -160,7 +158,7 @@ class ExternalDocRequestEndpoint(
 
     companion object {
         const val SUCCESS_MESSAGE_STATUS = "Success"
-        const val SUCCESS_MESSAGE_COMMENT = "Message successfully enqueued for court %s / room %s with id %s"
+        const val SUCCESS_MESSAGE_COMMENT = "Message successfully enqueued for court %s / room %s"
         const val IGNORED_MESSAGE_UNKNOWN_COURT = "Message ignored - the court %s / room %s values in the message is not processed"
         const val IGNORED_MESSAGE_NO_COURT = "Message ignored - no court code found in the message"
         const val NAMESPACE_URI = "http://www.justice.gov.uk/magistrates/external/ExternalDocumentRequest"

@@ -17,8 +17,8 @@ class TelemetryService(@Autowired private val telemetryClient: TelemetryClient) 
         telemetryClient.trackEvent(eventType.eventName, customDimensions, null)
     }
 
-    fun trackCourtListEvent(info: Info, messageId: String) {
-        val properties = mapOf(COURT_CODE_KEY to info.ouCode, HEARING_DATE_KEY to info.dateOfHearing.toString(), SQS_MESSAGE_ID_KEY to messageId)
+    fun trackCourtListEvent(info: Info) {
+        val properties = mapOf(COURT_CODE_KEY to info.ouCode, HEARING_DATE_KEY to info.dateOfHearing.toString())
 
         telemetryClient.trackEvent(TelemetryEventType.COURT_LIST_RECEIVED.eventName, properties, emptyMap())
     }

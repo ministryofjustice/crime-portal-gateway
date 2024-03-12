@@ -24,10 +24,9 @@ class MessageNotifier(
     @Value("\${aws.sns.court-case-events-topic}")
     private val topicArn: String
 ) {
-    fun send(case: Case, messageId: String) {
-        telemetryService.trackCourtCaseSplitEvent(case, messageId)
+    fun send(case: Case) {
         val message = objectMapper.writeValueAsString(case)
-        val subject = "Details for case " + case.caseNo + " in court " + case.courtCode + " published with messageId " + messageId
+        val subject = "Details for case " + case.caseNo + " in court " + case.courtCode + " published"
 
         val messageValue = MessageAttributeValue()
             .withDataType("String")
@@ -38,6 +37,7 @@ class MessageNotifier(
 
         val publishResult = amazonSNSClient.publish(publishRequest)
         log.info("Published message with subject {} with message Id {}", subject, publishResult.messageId)
+        telemetryService.trackCourtCaseSplitEvent(case, publishResult.messageId)
     }
 
     companion object {

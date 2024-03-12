@@ -22,11 +22,11 @@ class MessageProcessor(
 ) {
 
     @Throws(JsonProcessingException::class)
-    fun process(message: String, messageId: String) {
+    fun process(message: String) {
         val externalDocumentRequest = messageParser.parseMessage(message, ExternalDocumentRequest::class.java)
 
         val documents = externalDocumentRequest.documentWrapper.document
-        trackCourtListReceipt(documents, messageId)
+        trackCourtListReceipt(documents)
 
         return documents
             .stream()
@@ -41,18 +41,18 @@ class MessageProcessor(
             }
             .forEach {
                 log.debug("Sending {}", it.caseNo)
-                messageNotifier.send(it, "some-id")
+                messageNotifier.send(it)
             }
     }
 
-    private fun trackCourtListReceipt(documents: List<Document>, messageId: String) {
+    private fun trackCourtListReceipt(documents: List<Document>) {
         documents.stream()
             .map { it.info }
             .distinct()
             .forEach { info: Info ->
                 run {
                     log.debug("Track court list event $info")
-                    telemetryService.trackCourtListEvent(info, messageId)
+                    telemetryService.trackCourtListEvent(info)
                 }
             }
     }

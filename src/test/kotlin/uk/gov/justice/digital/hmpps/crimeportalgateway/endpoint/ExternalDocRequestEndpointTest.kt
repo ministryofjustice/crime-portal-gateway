@@ -76,7 +76,7 @@ internal class ExternalDocRequestEndpointTest {
         assertAck(ack)
 
         verify(telemetryService).trackEvent(TelemetryEventType.COURT_LIST_MESSAGE_RECEIVED, customDimensionsMap)
-        verify(messageProcessor).process(anyString(), anyString())
+        verify(messageProcessor).process(anyString())
         verify(s3Service).uploadMessage(eq(expectedMessageDetail), contains("ExternalDocumentRequest"))
         verifyNoMoreInteractions(telemetryService, s3Service)
     }
@@ -147,7 +147,7 @@ internal class ExternalDocRequestEndpointTest {
 
         assertAck(ack)
         verify(telemetryService, timeout(TIMEOUT_MS)).trackEvent(TelemetryEventType.COURT_LIST_MESSAGE_RECEIVED, customDimensionsMap)
-        verify(messageProcessor, timeout(TIMEOUT_MS)).process(anyString(), anyString())
+        verify(messageProcessor, timeout(TIMEOUT_MS)).process(anyString())
         verify(s3Service, timeout(TIMEOUT_MS)).uploadMessage(eq(expectedMessageDetail), contains("ExternalDocumentRequest"))
         verifyNoMoreInteractions(telemetryService, s3Service)
     }
