@@ -6,7 +6,6 @@ import com.amazonaws.services.s3.model.S3ObjectSummary
 import com.amazonaws.services.sns.AmazonSNS
 import com.amazonaws.services.sns.util.Topics
 import com.amazonaws.services.sqs.AmazonSQS
-import com.amazonaws.services.sqs.model.Message
 import com.amazonaws.services.sqs.model.ReceiveMessageRequest
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -126,8 +125,10 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
             )
         )
 
-        checkMessage(amazonSQS.receiveMessage(ReceiveMessageRequest(queueUrl)).messages[0], CaseDetails(166662981))
-        checkMessage(amazonSQS.receiveMessage(ReceiveMessageRequest(queueUrl)).messages[0], CaseDetails(1777732980))
+        val firstCase = CaseDetails(caseNo = 166662981, defendantName = "MR Abraham LINCOLN", pnc = "20030011985X", cro = "CR0006100061")
+        checkMessage(firstCase)
+        val secondCase = CaseDetails(1777732980, defendantName = "Mr Theremin MELLOTRON", pnc = "20120052494Q", cro = "CR0006200062")
+        checkMessage(secondCase)
         // possibly check S3 upload
     }
 
@@ -180,7 +181,8 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
 
     private fun readFile(fileName: String): String = File(fileName).readText(Charsets.UTF_8)
 
-    private fun checkMessage(message: Message, expectedCase: CaseDetails) {
+    private fun checkMessage(expectedCase: CaseDetails) {
+        val message = amazonSQS.receiveMessage(ReceiveMessageRequest(queueUrl)).messages[0]
         val messageBody = objectMapper.readValue(message.body, SQSMessage::class.java)
         val actualCase = objectMapper.readValue(messageBody.message, CaseDetails::class.java)
         assertThat(actualCase).isEqualTo(expectedCase)
@@ -213,6 +215,8 @@ data class SQSMessage(
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class CaseDetails(
-
-    val caseNo: Int
+    val caseNo: Int,
+    val defendantName: String,
+    val cro: String,
+    val pnc: String
 )
