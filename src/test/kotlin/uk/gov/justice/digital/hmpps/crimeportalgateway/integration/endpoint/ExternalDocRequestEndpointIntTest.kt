@@ -129,7 +129,7 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
         checkMessage(firstCase)
         val secondCase = CaseDetails(caseNo = 1777732980, defendantName = "Mr Theremin MELLOTRON", pnc = "20120052494Q", cro = "CR0006200062")
         checkMessage(secondCase)
-        checkS3Upload()
+        checkS3Upload("2020-10-26-B10")
     }
 
     @Test
@@ -151,7 +151,7 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
             .andExpect(noFault())
 
         checkMessagesOnQueue(0)
-        checkS3Upload()
+        checkS3Upload("2020-10-26-B10")
     }
 
     @Test
@@ -172,7 +172,7 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
             .andExpect(noFault())
 
         checkMessagesOnQueue(0)
-        checkS3Upload()
+        checkS3Upload("fail-2024-03-12")
     }
 
     private fun checkMessagesOnQueue(count: Int) {
@@ -180,10 +180,18 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
         assertThat(numberOfMessagesOnQueue).isEqualTo("$count")
     }
 
-    private fun checkS3Upload() {
+    private fun checkS3Upload(fileNameStart: String) {
         val items = amazonS3.listObjects(bucketName).objectSummaries
         assertThat(items.size).isEqualTo(1)
-        assertThat(items[0].key.startsWith("2020-10-26-B10XX-0"))
+        assertThat(items[0].key.startsWith(fileNameStart)).isTrue()
+        val s3Object = amazonS3.getObject(bucketName, items[0].key)
+        val startOfDoc = s3Object.objectContent.readNBytes(1000).toString(Charsets.UTF_8)
+        println(startOfDoc)
+        assertThat(
+            startOfDoc.startsWith(
+                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><ns2:ExternalDocumentRequest xmlns:ns2=\"http://www.justice.gov.uk/magistrates/external/ExternalDocumentRequest\"" // ktlint-disable max-line-length
+            )
+        ).isTrue()
     }
 
     private fun readFile(fileName: String): String = File(fileName).readText(Charsets.UTF_8)
