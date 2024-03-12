@@ -28,7 +28,7 @@ import org.springframework.ws.test.server.ResponseMatchers.xpath
 import org.springframework.xml.transform.StringSource
 import org.testcontainers.containers.localstack.LocalStackContainer
 import uk.gov.justice.digital.hmpps.crimeportalgateway.integration.IntegrationTestBase
-import uk.gov.justice.digital.hmpps.crimeportalgateway.service.TelemetryEventType
+import uk.gov.justice.digital.hmpps.crimeportalgateway.service.TelemetryEventType.COURT_LIST_MESSAGE_RECEIVED
 import uk.gov.justice.digital.hmpps.crimeportalgateway.service.TelemetryService
 import java.io.File
 import javax.xml.transform.Source
@@ -115,7 +115,7 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
             .andExpect(noFault())
 
         verify(telemetryService).trackEvent(
-            TelemetryEventType.COURT_LIST_MESSAGE_RECEIVED,
+            COURT_LIST_MESSAGE_RECEIVED,
             mapOf(
 
                 "courtCode" to "B10JQ",
@@ -127,7 +127,7 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
 
         val firstCase = CaseDetails(caseNo = 166662981, defendantName = "MR Abraham LINCOLN", pnc = "20030011985X", cro = "CR0006100061")
         checkMessage(firstCase)
-        val secondCase = CaseDetails(1777732980, defendantName = "Mr Theremin MELLOTRON", pnc = "20120052494Q", cro = "CR0006200062")
+        val secondCase = CaseDetails(caseNo = 1777732980, defendantName = "Mr Theremin MELLOTRON", pnc = "20120052494Q", cro = "CR0006200062")
         checkMessage(secondCase)
         // possibly check S3 upload
     }
@@ -151,8 +151,7 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
             .andExpect(noFault())
 
         // possibly check S3 upload
-        val numberOfMessagesOnQueue = countMessagesOnQueue()
-        assertThat(numberOfMessagesOnQueue).isEqualTo("0")
+        checkMessagesOnQueue(0)
     }
 
     @Test
@@ -172,12 +171,14 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
             .andExpect(xpath("//ns3:Acknowledgement/Ack/TimeStamp", namespaces).exists())
             .andExpect(noFault())
 
-        val numberOfMessagesOnQueue = countMessagesOnQueue()
-        assertThat(numberOfMessagesOnQueue).isEqualTo("0")
+        checkMessagesOnQueue(0)
         // possibly check S3 upload
     }
 
-    private fun countMessagesOnQueue() = amazonSQS.getQueueAttributes(queueUrl, listOf("ApproximateNumberOfMessages")).attributes["ApproximateNumberOfMessages"]
+    private fun checkMessagesOnQueue(count: Int) {
+        val numberOfMessagesOnQueue = amazonSQS.getQueueAttributes(queueUrl, listOf("ApproximateNumberOfMessages")).attributes["ApproximateNumberOfMessages"]
+        assertThat(numberOfMessagesOnQueue).isEqualTo("$count")
+    }
 
     private fun readFile(fileName: String): String = File(fileName).readText(Charsets.UTF_8)
 
