@@ -14,7 +14,6 @@ val junitJupiterVersion by extra { "5.9.0" }
 var awsSdkVersion = "1.12.543"
 val springBootVersion = "3.0.2"
 
-
 dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-web")
