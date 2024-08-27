@@ -22,18 +22,6 @@ env:
         name: crime-portal-gateway-secrets
         key: APPINSIGHTS_INSTRUMENTATIONKEY
 
-  - name: AWS_ACCESS_KEY_ID
-    valueFrom:
-      secretKeyRef:
-        name: crime-portal-gateway-queue-credentials
-        key: access_key_id
-
-  - name: AWS_SECRET_ACCESS_KEY
-    valueFrom:
-      secretKeyRef:
-        name: crime-portal-gateway-queue-credentials
-        key: secret_access_key
-
   - name: AWS_SQS_QUEUE_NAME
     valueFrom:
       secretKeyRef:
@@ -46,17 +34,11 @@ env:
         name: crime-portal-gateway-queue-credentials
         key: sqs_id
 
-  - name: AWS_S3_ACCESS_KEY_ID
+  - name: AWS_SNS_COURT_CASE_EVENTS_TOPIC
     valueFrom:
       secretKeyRef:
-        name: crime-portal-gateway-s3-credentials
-        key: access_key_id
-
-  - name: AWS_S3_SECRET_ACCESS_KEY
-    valueFrom:
-      secretKeyRef:
-        name: crime-portal-gateway-s3-credentials
-        key: secret_access_key
+        name: court-case-events-topic
+        key: topic_arn
 
   - name: AWS_S3_BUCKET_NAME
     valueFrom:

@@ -1,45 +1,33 @@
 package uk.gov.justice.digital.hmpps.crimeportalgateway.application
 
-import com.amazonaws.auth.AWSCredentials
-import com.amazonaws.auth.AWSStaticCredentialsProvider
-import com.amazonaws.auth.BasicAWSCredentials
-import com.amazonaws.auth.EnvironmentVariableCredentialsProvider
-import com.amazonaws.client.builder.AwsClientBuilder
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.AmazonS3ClientBuilder
-import com.amazonaws.services.sqs.AmazonSQS
-import com.amazonaws.services.sqs.AmazonSQSClientBuilder
+import com.amazonaws.services.sns.AmazonSNS
+import com.amazonaws.services.sns.AmazonSNSClientBuilder
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
 
-@Profile("!test")
+@Profile(value = ["dev", "preprod", "prod"])
 @Configuration
 class AwsConfig(
-    @Value("\${aws.region-name}") private val regionName: String,
-    @Value("\${aws.sqs-endpoint-url}") private val sqsEndpointUrl: String,
-    @Value("\${aws.s3.access_key_id}") private val s3AccessKeyId: String,
-    @Value("\${aws.s3.secret_access_key}") private val s3SecretAccessKey: String
+    @Value("\${aws.region-name}")
+    var regionName: String
 ) {
 
     @Bean
-    fun amazonSqs(): AmazonSQS {
-        val endpointConfiguration = AwsClientBuilder.EndpointConfiguration(sqsEndpointUrl, regionName)
-
-        return AmazonSQSClientBuilder.standard()
-            .withCredentials(EnvironmentVariableCredentialsProvider())
-            .withEndpointConfiguration(endpointConfiguration)
+    fun amazonS3Client(): AmazonS3 {
+        return AmazonS3ClientBuilder
+            .standard()
+            .withRegion(regionName)
             .build()
     }
 
     @Bean
-    fun amazonS3Client(): AmazonS3 {
-        val credentials: AWSCredentials = BasicAWSCredentials(s3AccessKeyId, s3SecretAccessKey)
-
-        return AmazonS3ClientBuilder
+    fun amazonSNSClient(): AmazonSNS {
+        return AmazonSNSClientBuilder
             .standard()
-            .withCredentials(AWSStaticCredentialsProvider(credentials))
             .withRegion(regionName)
             .build()
     }
