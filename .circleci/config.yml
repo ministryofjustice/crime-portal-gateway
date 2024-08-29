@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   owasp: entur/owasp@0.0.10
-  hmpps: ministryofjustice/hmpps@8
+  hmpps: ministryofjustice/hmpps@10
   slack: circleci/slack@4.1.1
 
 jobs:
