@@ -1,7 +1,7 @@
 version: 2.1
 
 parameters:
-  releases-slack-channel:
+  slack-channel:
     type: string
     default:  probation_in_court_dev
 
@@ -103,7 +103,7 @@ workflows:
             - hmpps-common-vars
             - court-probation-live-prod
           slack_notification: true
-          slack_channel_name: << pipeline.parameters.releases-slack-channel >>
+          slack_channel_name: << pipeline.parameters.slack-channel >>
           requires:
             - request-prod-approval
 
