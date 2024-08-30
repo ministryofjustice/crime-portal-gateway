@@ -57,9 +57,6 @@ workflows:
       - hmpps/build_docker:
           context: [hmpps-common-vars]
           name: build_docker
-          jira_update: true
-          pipeline_id: <<pipeline.id>>
-          pipeline_number: <<pipeline.number>>
           filters:
             branches:
               only:
