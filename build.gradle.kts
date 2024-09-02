@@ -28,7 +28,7 @@ dependencies {
         implementation("org.apache.santuario:xmlsec:3.0.0")
     }
     implementation("org.springframework.boot:spring-boot-starter-web-services")
-    implementation("com.microsoft.azure:applicationinsights-spring-boot-starter:2.6.4")
+    implementation("com.microsoft.azure:applicationinsights-web:3.5.4")
 
     implementation("com.amazonaws:aws-java-sdk-s3:$awsSdkVersion")
     implementation("com.amazonaws:aws-java-sdk-sns:$awsSdkVersion")

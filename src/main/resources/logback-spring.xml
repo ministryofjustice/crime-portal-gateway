@@ -22,7 +22,6 @@
         <Pattern>${LOG_PATTERN}</Pattern>
       </layout>
     </appender>
-    <appender name="logAppender" class="com.microsoft.applicationinsights.logback.ApplicationInsightsAppender"/>
   </springProfile>
 
   <logger name="org.springframework.ws" additivity="false" level="INFO">
