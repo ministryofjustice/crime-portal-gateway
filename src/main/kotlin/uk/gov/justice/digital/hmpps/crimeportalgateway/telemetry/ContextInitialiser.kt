@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 @Configuration
 class ContextInitialiser(
-    buildProperties: BuildProperties
+    buildProperties: BuildProperties,
 ) {
     val version: String = buildProperties.version
 
