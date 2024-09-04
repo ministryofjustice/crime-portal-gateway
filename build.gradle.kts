@@ -1,11 +1,20 @@
-import org.gradle.internal.impldep.org.junit.experimental.categories.Categories.CategoryFilter.exclude
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("uk.gov.justice.hmpps.gradle-spring-boot") version "4.9.0"
-    kotlin("plugin.spring") version "1.8.0"
+    id("uk.gov.justice.hmpps.gradle-spring-boot") version "6.0.4"
+    kotlin("plugin.spring") version "2.0.20"
     id("org.unbroken-dome.xjc") version "2.0.0"
+    kotlin("jvm") version "2.0.20"
 }
 
+repositories {
+    mavenCentral()
+}
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+}
 dependencyCheck {
     suppressionFiles.add("cpg-suppressions.xml")
 }
@@ -36,13 +45,16 @@ dependencies {
     implementation("com.amazonaws:aws-java-sdk-sts:$awsSdkVersion")
 
     implementation("wsdl4j:wsdl4j:1.6.3")
-    implementation("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
+    implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.2")
+    implementation("com.sun.xml.bind:jaxb-impl:4.0.5")
+
+    xjcTool("com.sun.xml.bind:jaxb-xjc:2.3.3")
+    xjcTool("com.sun.xml.bind:jaxb-impl:2.3.3")
     // Spring uses 2.11.4 - using 2.12.3 breaks Spring.
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.4")
 
     runtimeOnly("org.apache.ws.xmlschema", "xmlschema-core", "2.2.5")
-    runtimeOnly("org.glassfish.jaxb:jaxb-runtime:2.4.0-b180830.0438")
-
+    runtimeOnly("org.glassfish.jaxb:jaxb-runtime:4.0.5")
     implementation("net.bytebuddy:byte-buddy:1.15.1")
     testImplementation("org.testcontainers:localstack:1.19.6")
     testImplementation("org.testcontainers:junit-jupiter:1.19.6")
@@ -72,4 +84,10 @@ tasks {
 
 tasks.named("assemble") {
     dependsOn("copyAgentConfig")
+}
+
+tasks.withType<KotlinCompile> {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_21
+    }
 }
