@@ -1,5 +1,10 @@
 package uk.gov.justice.digital.hmpps.crimeportalgateway.application
 
+import jakarta.xml.soap.SOAPElement
+import jakarta.xml.soap.SOAPEnvelope
+import jakarta.xml.soap.SOAPHeader
+import jakarta.xml.soap.SOAPMessage
+import jakarta.xml.soap.SOAPPart
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -15,11 +20,6 @@ import org.springframework.ws.context.MessageContext
 import org.springframework.ws.soap.saaj.SaajSoapMessage
 import uk.gov.justice.digital.hmpps.crimeportalgateway.service.TelemetryEventType
 import uk.gov.justice.digital.hmpps.crimeportalgateway.service.TelemetryService
-import javax.xml.soap.SOAPElement
-import javax.xml.soap.SOAPEnvelope
-import javax.xml.soap.SOAPHeader
-import javax.xml.soap.SOAPMessage
-import javax.xml.soap.SOAPPart
 
 @ExtendWith(MockitoExtension::class)
 class SoapHeaderAddressInterceptorTest {

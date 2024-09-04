@@ -9,12 +9,12 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer
+import jakarta.validation.Valid
+import jakarta.validation.constraints.NotNull
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
-import javax.validation.Valid
-import javax.validation.constraints.NotNull
 
 data class Session(
     @JacksonXmlProperty(localName = "s_id")

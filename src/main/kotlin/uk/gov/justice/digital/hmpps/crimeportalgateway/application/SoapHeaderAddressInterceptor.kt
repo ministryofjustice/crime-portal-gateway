@@ -1,5 +1,9 @@
 package uk.gov.justice.digital.hmpps.crimeportalgateway.application
 
+import jakarta.xml.soap.SOAPElement
+import jakarta.xml.soap.SOAPException
+import jakarta.xml.soap.SOAPHeader
+import jakarta.xml.soap.SOAPHeaderElement
 import org.slf4j.LoggerFactory
 import org.springframework.ws.context.MessageContext
 import org.springframework.ws.server.EndpointInterceptor
@@ -11,10 +15,6 @@ import java.nio.charset.StandardCharsets
 import java.util.Collections
 import java.util.HashMap
 import java.util.UUID
-import javax.xml.soap.SOAPElement
-import javax.xml.soap.SOAPException
-import javax.xml.soap.SOAPHeader
-import javax.xml.soap.SOAPHeaderElement
 
 class SoapHeaderAddressInterceptor(private val telemetryService: TelemetryService) : EndpointInterceptor {
     override fun handleRequest(

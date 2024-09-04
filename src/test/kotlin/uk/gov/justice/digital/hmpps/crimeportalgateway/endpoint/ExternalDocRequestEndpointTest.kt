@@ -1,5 +1,7 @@
 package uk.gov.justice.digital.hmpps.crimeportalgateway.endpoint
 
+import jakarta.xml.bind.JAXBContext
+import jakarta.xml.bind.Unmarshaller
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
@@ -26,8 +28,6 @@ import uk.gov.justice.magistrates.external.externaldocumentrequest.ExternalDocum
 import java.io.File
 import java.io.StringReader
 import javax.xml.XMLConstants
-import javax.xml.bind.JAXBContext
-import javax.xml.bind.Unmarshaller
 import javax.xml.validation.Schema
 import javax.xml.validation.SchemaFactory
 

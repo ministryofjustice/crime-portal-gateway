@@ -1,9 +1,9 @@
 package uk.gov.justice.digital.hmpps.crimeportalgateway.model
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
+import jakarta.validation.Valid
+import jakarta.validation.constraints.NotNull
 import uk.gov.justice.digital.hmpps.crimeportalgateway.messaging.MessageParser.Companion.GW_MSG_SCHEMA
-import javax.validation.Valid
-import javax.validation.constraints.NotNull
 
 data class MessageBodyType(
     @field:Valid

@@ -2,8 +2,8 @@ package uk.gov.justice.digital.hmpps.crimeportalgateway.model.externaldocumentre
 
 import com.fasterxml.jackson.annotation.JsonBackReference
 import com.fasterxml.jackson.annotation.JsonManagedReference
-import javax.validation.Valid
-import javax.validation.constraints.NotNull
+import jakarta.validation.Valid
+import jakarta.validation.constraints.NotNull
 
 data class DataJob(
     var name: String? = null,

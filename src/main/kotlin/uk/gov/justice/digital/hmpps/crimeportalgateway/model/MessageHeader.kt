@@ -1,9 +1,9 @@
 package uk.gov.justice.digital.hmpps.crimeportalgateway.model
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotNull
 import uk.gov.justice.digital.hmpps.crimeportalgateway.messaging.MessageParser.Companion.CSCI_HDR_NS
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
 
 data class MessageHeader(
     @field:NotNull

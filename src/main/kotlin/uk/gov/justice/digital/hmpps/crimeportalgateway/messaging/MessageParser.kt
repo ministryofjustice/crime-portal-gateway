@@ -3,10 +3,10 @@ package uk.gov.justice.digital.hmpps.crimeportalgateway.messaging
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.JavaType
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
+import jakarta.validation.ConstraintViolationException
+import jakarta.validation.Validator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
-import javax.validation.ConstraintViolationException
-import javax.validation.Validator
 
 class MessageParser<T>(
     @Qualifier("messageXmlMapper") private val xmlMapper: XmlMapper,

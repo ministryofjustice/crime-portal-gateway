@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.adapters.XmlAdapter
 class LocalDateTimeAdapter : XmlAdapter<String, LocalDateTime>() {
     private val dateTimeFormatter = DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mm:ss")
 
-    override fun unmarshal(value: String?): LocalDateTime? {
+    override fun unmarshal(value: String?): LocalDateTime {
         return LocalDateTime.parse(value)
     }
 
