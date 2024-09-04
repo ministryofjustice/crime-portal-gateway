@@ -22,6 +22,12 @@ env:
         name: crime-portal-gateway-secrets
         key: APPINSIGHTS_INSTRUMENTATIONKEY
 
+  - name: APPLICATIONINSIGHTS_CONNECTION_STRING
+    valueFrom:
+      secretKeyRef:
+        name: applicationinsights-connection-string
+        key: applicationinsights_connection_string
+
   - name: AWS_SQS_QUEUE_NAME
     valueFrom:
       secretKeyRef:
