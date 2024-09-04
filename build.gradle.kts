@@ -47,6 +47,12 @@ dependencies {
 
     implementation("wsdl4j:wsdl4j:1.6.3")
     implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.2")
+
+    //    TODO: Migrate to using jakarta.xml.bind:jakarta.xml.bind-api.
+    //     The xsd file imports a package from http://www.justice.gov.uk/magistrates/generic/CSCI_Status
+    //     which uses javax as opposed to the newer jakarta packages.
+    implementation("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
+
     implementation("com.sun.xml.bind:jaxb-impl:4.0.5")
 
     xjcTool("com.sun.xml.bind:jaxb-xjc:2.3.3")
@@ -59,7 +65,7 @@ dependencies {
     implementation("net.bytebuddy:byte-buddy:1.15.1")
     testImplementation("org.testcontainers:localstack:1.19.6")
     testImplementation("org.testcontainers:junit-jupiter:1.19.6")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.0")
     testImplementation("org.springframework.boot:spring-boot-starter-webflux")
     testImplementation("org.springframework.ws:spring-ws-test:3.1.3")
     testImplementation("org.mockito:mockito-core:5.1.1")
