@@ -1,9 +1,10 @@
 package uk.gov.justice.digital.hmpps.crimeportalgateway.telemetry
 
-import com.microsoft.applicationinsights.extensibility.ContextInitializer
+import com.microsoft.applicationinsights.extensibility.context.ComponentContext
 import org.springframework.boot.info.BuildProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import java.util.concurrent.ConcurrentHashMap
 
 @Configuration
 class ContextInitialiser(
@@ -12,5 +13,8 @@ class ContextInitialiser(
     val version: String = buildProperties.version
 
     @Bean
-    fun versionContextInitializer() = ContextInitializer { it.component.setVersion(version) }
+    fun versionContextInitializer(): String {
+        ComponentContext(ConcurrentHashMap()).setVersion(version)
+        return version
+    }
 }
