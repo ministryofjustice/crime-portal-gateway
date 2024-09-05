@@ -1,6 +1,5 @@
 package uk.gov.justice.digital.hmpps.crimeportalgateway.application
 
-import jakarta.xml.bind.JAXBContext
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.web.servlet.ServletRegistrationBean
@@ -24,6 +23,7 @@ import org.springframework.xml.xsd.commons.CommonsXsdSchemaCollection
 import uk.gov.justice.magistrates.external.externaldocumentrequest.ExternalDocumentRequest
 import java.io.File
 import javax.xml.XMLConstants
+import javax.xml.bind.JAXBContext
 import javax.xml.validation.Schema
 import javax.xml.validation.SchemaFactory
 

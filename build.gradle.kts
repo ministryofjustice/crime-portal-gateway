@@ -46,7 +46,6 @@ dependencies {
     implementation("com.amazonaws:aws-java-sdk-sts:$awsSdkVersion")
 
     implementation("wsdl4j:wsdl4j:1.6.3")
-    implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.2")
 
     //    TODO: Migrate to using jakarta.xml.bind:jakarta.xml.bind-api.
     //     The xsd file imports a package from http://www.justice.gov.uk/magistrates/generic/CSCI_Status
@@ -61,7 +60,7 @@ dependencies {
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.4")
 
     runtimeOnly("org.apache.ws.xmlschema", "xmlschema-core", "2.2.5")
-    runtimeOnly("org.glassfish.jaxb:jaxb-runtime:4.0.5")
+    runtimeOnly("org.glassfish.jaxb:jaxb-runtime:2.4.0-b180830.0438")
     implementation("net.bytebuddy:byte-buddy:1.15.1")
     testImplementation("org.testcontainers:localstack:1.19.6")
     testImplementation("org.testcontainers:junit-jupiter:1.19.6")
