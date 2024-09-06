@@ -48,7 +48,7 @@ dependencies {
     implementation("wsdl4j:wsdl4j:1.6.3")
 
     //    TODO: Migrate to using jakarta.xml.bind:jakarta.xml.bind-api.
-    //     The xsd file imports a package from http://www.justice.gov.uk/magistrates/generic/CSCI_Status
+    //     The xsd file imports a package from http://www.justice.gov.uk/magistrates/
     //     which uses javax as opposed to the newer jakarta packages.
     implementation("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
 
