@@ -54,8 +54,10 @@ dependencies {
 
     implementation("com.sun.xml.bind:jaxb-impl:4.0.5")
 
-    xjcTool("com.sun.xml.bind:jaxb-xjc:2.3.3")
-    xjcTool("com.sun.xml.bind:jaxb-impl:2.3.3")
+    xjcTool("com.sun.xml.bind:jaxb-xjc:3.0.2")
+    xjcTool("com.sun.xml.bind:jaxb-impl:3.0.2")
+    implementation("jakarta.xml.bind:jakarta.xml.bind-api:3.0.1")
+
     // Spring uses 2.11.4 - using 2.12.3 breaks Spring.
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.4")
 
@@ -74,6 +76,7 @@ dependencies {
 xjc {
     srcDirName.set("resources/xsd")
     extension.set(true)
+    xjcVersion.set("3.0")
 }
 
 sourceSets.named("main") {

@@ -1,6 +1,8 @@
 package uk.gov.justice.digital.hmpps.crimeportalgateway.endpoint
 
 import jakarta.annotation.PostConstruct
+import jakarta.xml.bind.JAXBContext
+import jakarta.xml.bind.Marshaller
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -22,10 +24,6 @@ import java.io.StringWriter
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.concurrent.CompletableFuture
-import javax.xml.bind.JAXBContext
-import javax.xml.bind.JAXBElement
-import javax.xml.bind.Marshaller
-import javax.xml.namespace.QName
 import javax.xml.validation.Schema
 
 private const val COURT_CODE_LABEL = "courtCode"
