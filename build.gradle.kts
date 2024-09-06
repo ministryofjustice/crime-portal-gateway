@@ -46,17 +46,11 @@ dependencies {
     implementation("com.amazonaws:aws-java-sdk-sts:$awsSdkVersion")
 
     implementation("wsdl4j:wsdl4j:1.6.3")
-
-    //    TODO: Migrate to using jakarta.xml.bind:jakarta.xml.bind-api.
-    //     The xsd file imports a package from http://www.justice.gov.uk/magistrates/
-    //     which uses javax as opposed to the newer jakarta packages.
-    implementation("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
-
     implementation("com.sun.xml.bind:jaxb-impl:4.0.5")
+    implementation("jakarta.xml.bind:jakarta.xml.bind-api:3.0.1")
 
     xjcTool("com.sun.xml.bind:jaxb-xjc:3.0.2")
     xjcTool("com.sun.xml.bind:jaxb-impl:3.0.2")
-    implementation("jakarta.xml.bind:jakarta.xml.bind-api:3.0.1")
 
     // Spring uses 2.11.4 - using 2.12.3 breaks Spring.
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.4")
