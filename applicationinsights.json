@@ -3,6 +3,30 @@
     "name": "crime-portal-gateway",
     "instance": "crime-portal-gateway"
   },
+  "instrumentation": {
+    "logging": {
+      "level": "DEBUG"
+    }
+  },
+  "sampling": {
+    "percentage": 100
+  },
+  "preview": {
+    "sampling": {
+      "overrides": [
+        {
+          "attributes": [
+            {
+              "key": "http.url",
+              "value": "https?://[^/]+/health.*",
+              "matchType": "regexp"
+            }
+          ],
+          "percentage": 10
+        }
+      ]
+    }
+  },
   "heartbeat": {
     "intervalSeconds": 15
   }
