@@ -16,12 +16,6 @@ env:
   - name: INCLUDED_COURT_CODES
     value: "{{ .Values.env.INCLUDED_COURT_CODES }}"
 
-  - name: APPINSIGHTS_INSTRUMENTATIONKEY
-    valueFrom:
-      secretKeyRef:
-        name: crime-portal-gateway-secrets
-        key: APPINSIGHTS_INSTRUMENTATIONKEY
-
   - name: APPLICATIONINSIGHTS_CONNECTION_STRING
     valueFrom:
       secretKeyRef:
