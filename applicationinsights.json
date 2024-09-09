@@ -3,6 +3,9 @@
     "name": "crime-portal-gateway",
     "instance": "crime-portal-gateway"
   },
+  "customDimensions": {
+    "service.version": "${BUILD_NUMBER}"
+  },
   "instrumentation": {
     "logging": {
       "level": "DEBUG"
