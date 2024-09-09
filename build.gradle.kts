@@ -57,7 +57,6 @@ dependencies {
 
     runtimeOnly("org.apache.ws.xmlschema", "xmlschema-core", "2.2.5")
     runtimeOnly("org.glassfish.jaxb:jaxb-runtime:2.4.0-b180830.0438")
-    implementation("net.bytebuddy:byte-buddy:1.15.1")
     testImplementation("org.testcontainers:localstack:1.19.6")
     testImplementation("org.testcontainers:junit-jupiter:1.19.6")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.0")
