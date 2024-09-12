@@ -1,16 +1,23 @@
 version: 2.1
 
+parameters:
+  alerts-slack-channel:
+    type: string
+    default: probation_in_court_alerts_dev
+  releases-slack-channel:
+    type: string
+    default: probation_in_court_alerts_prod
+
 orbs:
-  owasp: entur/owasp@0.0.10
-  hmpps: ministryofjustice/hmpps@7.1.0
-  slack: circleci/slack@4.1.1
-  jira: circleci/jira@1.2.2
+  hmpps: ministryofjustice/hmpps@10
 
 jobs:
   validate:
     executor:
-      name: hmpps/java
-      tag: "17.0"
+      name: hmpps/localstack
+      jdk_tag: "21.0"
+      localstack_tag: "3"
+      services: "sqs,sns,s3"
     steps:
       - checkout
       - restore_cache:
@@ -27,20 +34,6 @@ jobs:
           path: build/test-results
       - store_artifacts:
           path: build/reports/tests
-      - slack/notify:
-          event: fail
-          custom: |
-            {
-                "blocks": [
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": "Failed: $CIRCLE_USERNAME's build of \n<$CIRCLE_BUILD_URL|$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME>\n(<https://app.circleci.com/pipelines/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME?branch=$CIRCLE_BRANCH|$CIRCLE_BRANCH>) \n- <$CIRCLE_BUILD_URL|$CIRCLE_JOB> failed"
-                        }
-                    }
-                ]
-            }
 
 workflows:
   version: 2
@@ -51,9 +44,6 @@ workflows:
           filters:
             tags:
               ignore: /.*/
-          post-steps:
-              - jira/notify:
-                job_type: build
       - hmpps/helm_lint:
           name: helm_lint
       - hmpps/build_docker:
@@ -64,16 +54,15 @@ workflows:
               only:
                 - main
                 - /.*deployable_branch.*/
-          post-steps:
-            - jira/notify:
-              job_type: build
       - hmpps/deploy_env:
           name: deploy_dev
           env: "dev"
+          jira_update: true
+          pipeline_id: <<pipeline.id>>
+          pipeline_number: <<pipeline.number>>
           helm_additional_args: --values ./crime-portal-gateway/values-live.yaml
           context:
             - hmpps-common-vars
-            - court-probation-live-dev
           filters:
             branches:
               only:
@@ -90,6 +79,10 @@ workflows:
       - hmpps/deploy_env:
           name: deploy_preprod
           env: "preprod"
+          jira_update: true
+          pipeline_id: <<pipeline.id>>
+          pipeline_number: <<pipeline.number>>
+          jira_env_type: "staging"
           helm_additional_args: --values ./crime-portal-gateway/values-live.yaml
           context:
             - hmpps-common-vars
@@ -103,12 +96,16 @@ workflows:
       - hmpps/deploy_env:
           name: deploy_prod
           env: "prod"
+          jira_update: true
+          pipeline_id: <<pipeline.id>>
+          pipeline_number: <<pipeline.number>>
+          jira_env_type: "production"
           helm_additional_args: --values ./crime-portal-gateway/values-live.yaml
           context:
             - hmpps-common-vars
             - court-probation-live-prod
           slack_notification: true
-          slack_channel_name: probation_in_court_dev
+          slack_channel_name: << pipeline.parameters.releases-slack-channel >>
           requires:
             - request-prod-approval
 
@@ -121,7 +118,16 @@ workflows:
               only:
                 - main
     jobs:
-      - owasp/gradle_owasp_dependency_check:
-          executor:
-            name: hmpps/java
-            tag: "17.0"
+      - hmpps/gradle_owasp_dependency_check:
+          slack_channel: << pipeline.parameters.alerts-slack-channel >>
+          context:
+            - hmpps-common-vars
+      - hmpps/trivy_latest_scan:
+          slack_channel: << pipeline.parameters.alerts-slack-channel >>
+          context:
+            - hmpps-common-vars
+      - hmpps/veracode_pipeline_scan:
+          slack_channel: << pipeline.parameters.alerts-slack-channel >>
+          context:
+            - hmpps-common-vars
+            - veracode-credentials
