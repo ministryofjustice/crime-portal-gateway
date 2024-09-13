@@ -26,6 +26,7 @@ val springBootVersion = "3.0.2"
 
 dependencies {
 
+    implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:4.4.2")
     implementation("org.springframework.boot:spring-boot-starter-web")
 
     implementation("org.springframework.ws:spring-ws-security:4.0.1") {
@@ -42,7 +43,7 @@ dependencies {
     implementation("com.microsoft.azure:applicationinsights-web:3.5.4")
 
     implementation("com.amazonaws:aws-java-sdk-s3:$awsSdkVersion")
-    implementation("com.amazonaws:aws-java-sdk-sns:$awsSdkVersion")
+
     implementation("com.amazonaws:aws-java-sdk-sts:$awsSdkVersion")
 
     implementation("wsdl4j:wsdl4j:1.6.3")

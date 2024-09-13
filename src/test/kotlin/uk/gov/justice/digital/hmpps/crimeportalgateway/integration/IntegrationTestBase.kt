@@ -19,7 +19,6 @@ import uk.gov.justice.digital.hmpps.crimeportalgateway.service.TelemetryService
 @ActiveProfiles("test")
 @Testcontainers
 abstract class IntegrationTestBase {
-    @Suppress("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     lateinit var webTestClient: WebTestClient
 
