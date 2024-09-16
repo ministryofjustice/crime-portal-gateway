@@ -34,7 +34,7 @@ env:
         name: crime-portal-gateway-queue-credentials
         key: sqs_id
 
-  - name: HMPPS_SQS_TOPICS_ COURTCASEEVENTSTOPIC_ARN
+  - name: HMPPS_SQS_TOPICS_COURTCASEEVENTSTOPIC_ARN
     valueFrom:
       secretKeyRef:
         name: court-case-events-topic
