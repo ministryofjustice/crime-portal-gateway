@@ -17,7 +17,6 @@ import uk.gov.justice.digital.hmpps.crimeportalgateway.service.TelemetryService
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @ActiveProfiles("test")
-@Testcontainers
 abstract class IntegrationTestBase {
     @Autowired
     lateinit var webTestClient: WebTestClient
@@ -35,13 +34,4 @@ abstract class IntegrationTestBase {
         mockClient = MockWebServiceClient.createClient(applicationContext)
     }
 
-    companion object {
-        val localStackContainer = LocalStackHelper.instance
-
-        @JvmStatic
-        @DynamicPropertySource
-        fun testcontainers(registry: DynamicPropertyRegistry) {
-            localStackContainer?.also { setLocalStackProperties(it, registry) }
-        }
-    }
 }
