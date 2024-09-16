@@ -31,7 +31,7 @@ class MessageNotifier(
                 .dataType("String")
                 .stringValue(MESSAGE_TYPE).build()
 
-        val publishResult = topic.publish("LIBRA Hearing", message, mapOf("messageType" to messageValue))
+        val publishResult = topic.publish("libra.case.received", message, mapOf("messageType" to messageValue))
         log.info("Published message with subject {} with message Id {}", subject, publishResult.messageId())
         telemetryService.trackCourtCaseSplitEvent(case, publishResult.messageId())
     }
