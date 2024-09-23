@@ -48,7 +48,7 @@ class WebServiceSecurityConfig(
 
         // validate incoming request
         securityInterceptor.setValidationActions(requestActions)
-        Init.init();
+        Init.init()
         securityInterceptor.setValidationSignatureCrypto(getValidationCryptoFactoryBean().getObject())
         securityInterceptor.setValidationDecryptionCrypto(getValidationCryptoFactoryBean().getObject())
         securityInterceptor.setValidationCallbackHandler(keyStoreCallbackHandler())
