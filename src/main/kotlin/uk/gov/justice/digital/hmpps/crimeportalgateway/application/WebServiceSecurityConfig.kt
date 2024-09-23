@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.hmpps.crimeportalgateway.application
 
+import org.apache.xml.security.Init
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -47,6 +48,7 @@ class WebServiceSecurityConfig(
 
         // validate incoming request
         securityInterceptor.setValidationActions(requestActions)
+        Init.init();
         securityInterceptor.setValidationSignatureCrypto(getValidationCryptoFactoryBean().getObject())
         securityInterceptor.setValidationDecryptionCrypto(getValidationCryptoFactoryBean().getObject())
         securityInterceptor.setValidationCallbackHandler(keyStoreCallbackHandler())
