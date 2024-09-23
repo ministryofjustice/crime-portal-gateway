@@ -34,6 +34,7 @@ class WebServiceSecurityConfig(
 
     @Bean
     fun getValidationCryptoFactoryBean(): CryptoFactoryBean {
+        Init.init()
         val cryptoFactoryBean = CryptoFactoryBean()
         cryptoFactoryBean.setKeyStoreLocation(FileSystemResource(keystoreFilePath))
         cryptoFactoryBean.setKeyStorePassword(keystorePassword)
@@ -48,7 +49,6 @@ class WebServiceSecurityConfig(
 
         // validate incoming request
         securityInterceptor.setValidationActions(requestActions)
-        Init.init()
         securityInterceptor.setValidationSignatureCrypto(getValidationCryptoFactoryBean().getObject())
         securityInterceptor.setValidationDecryptionCrypto(getValidationCryptoFactoryBean().getObject())
         securityInterceptor.setValidationCallbackHandler(keyStoreCallbackHandler())
