@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.assertj.core.api.Assertions.assertThat
+import org.awaitility.Awaitility.await
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
@@ -27,6 +28,7 @@ import software.amazon.awssdk.services.s3.model.DeleteBucketRequest
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest
 import software.amazon.awssdk.services.s3.model.GetObjectRequest
 import software.amazon.awssdk.services.s3.model.ListObjectsRequest
+import software.amazon.awssdk.services.sqs.model.DeleteMessageRequest
 import software.amazon.awssdk.services.sqs.model.PurgeQueueRequest
 import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest
 import uk.gov.justice.digital.hmpps.crimeportalgateway.integration.IntegrationTestBase
@@ -174,7 +176,7 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
             .andExpect(xpath("//ns3:Acknowledgement/Ack/TimeStamp", namespaces).exists())
             .andExpect(noFault())
 
-        checkMessagesOnQueue(0)
+        checkMessagesOnQueue()
         checkS3Upload("2020-10-26-B10")
     }
 
@@ -195,15 +197,15 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
             .andExpect(xpath("//ns3:Acknowledgement/Ack/TimeStamp", namespaces).exists())
             .andExpect(noFault())
 
-        checkMessagesOnQueue(0)
+        checkMessagesOnQueue()
         val date = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE)
 
         checkS3Upload("fail-$date")
     }
 
-    private fun checkMessagesOnQueue(count: Int) {
+    private fun checkMessagesOnQueue() {
         val numberOfMessagesOnQueue = courtCaseEventsQueue?.sqsClient?.countMessagesOnQueue(courtCaseEventsQueue?.queueUrl!!)?.get()!!
-        assertThat(numberOfMessagesOnQueue).isEqualTo(count)
+        assertThat(numberOfMessagesOnQueue).isEqualTo(0)
     }
 
     private fun countMessagesOnQueue() = courtCaseEventsQueue?.sqsClient?.countMessagesOnQueue(courtCaseEventsQueue?.queueUrl!!)!!.get()
@@ -227,15 +229,13 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
 
     private fun checkMessage(expectedCases: List<CaseDetails>): MutableList<CaseDetails> {
         val cases = mutableListOf<CaseDetails>()
+        await().until { countMessagesOnQueue() == 2 }
         while (countMessagesOnQueue() > 0) {
             val message = courtCaseEventsQueue?.sqsClient?.receiveMessage(ReceiveMessageRequest.builder().queueUrl(courtCaseEventsQueue?.queueUrl!!).build())!!.get()
-            val messageDetails = message.messages()
-            if (messageDetails.isEmpty()) {
-                continue
-            }
-            val sqsMessage: SQSMessage = objectMapper.readValue(messageDetails[0].body(), SQSMessage::class.java)
+            val sqsMessage: SQSMessage = objectMapper.readValue(message.messages()[0].body(), SQSMessage::class.java)
 
             cases.add(objectMapper.readValue(sqsMessage.message, CaseDetails::class.java))
+            courtCaseEventsQueue?.sqsClient?.deleteMessage(DeleteMessageRequest.builder().queueUrl(courtCaseEventsQueue?.queueUrl!!).receiptHandle(message.messages()[0].receiptHandle()).build())
         }
         assertThat(cases).containsAll(expectedCases)
         return cases
