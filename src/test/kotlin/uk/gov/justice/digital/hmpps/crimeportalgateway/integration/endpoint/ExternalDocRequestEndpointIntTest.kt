@@ -235,7 +235,9 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
             val sqsMessage: SQSMessage = objectMapper.readValue(message.messages()[0].body(), SQSMessage::class.java)
 
             cases.add(objectMapper.readValue(sqsMessage.message, CaseDetails::class.java))
-            courtCaseEventsQueue?.sqsClient?.deleteMessage(DeleteMessageRequest.builder().queueUrl(courtCaseEventsQueue?.queueUrl!!).receiptHandle(message.messages()[0].receiptHandle()).build())
+            courtCaseEventsQueue?.sqsClient?.deleteMessage(
+                DeleteMessageRequest.builder().queueUrl(courtCaseEventsQueue?.queueUrl!!).receiptHandle(message.messages()[0].receiptHandle()).build(),
+            )
         }
         assertThat(cases).containsAll(expectedCases)
         return cases
