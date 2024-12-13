@@ -8,6 +8,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -108,6 +109,54 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
     }
 
     @Test
+    fun `when two duplicate messages received containing two cases_only one message per case ends up on the queue`() {
+        val externalDoc1 = readFile("src/test/resources/soap/sample-request.xml")
+        val requestEnvelope: Source = StringSource(externalDoc1)
+        mockClient.sendRequest(RequestCreators.withSoapEnvelope(requestEnvelope))
+            .andExpect(validPayload(xsdResource))
+            .andExpect(
+                xpath("//ns3:Acknowledgement/Ack/MessageComment", namespaces)
+                    .evaluatesTo("MessageComment"),
+            )
+            .andExpect(
+                xpath("//ns3:Acknowledgement/Ack/MessageStatus", namespaces)
+                    .evaluatesTo("Success"),
+            )
+            .andExpect(xpath("//ns3:Acknowledgement/Ack/TimeStamp", namespaces).exists())
+            .andExpect(noFault())
+        // send duplicate message
+        mockClient.sendRequest(RequestCreators.withSoapEnvelope(requestEnvelope))
+            .andExpect(validPayload(xsdResource))
+            .andExpect(
+                xpath("//ns3:Acknowledgement/Ack/MessageComment", namespaces)
+                    .evaluatesTo("MessageComment"),
+            )
+            .andExpect(
+                xpath("//ns3:Acknowledgement/Ack/MessageStatus", namespaces)
+                    .evaluatesTo("Success"),
+            )
+            .andExpect(xpath("//ns3:Acknowledgement/Ack/TimeStamp", namespaces).exists())
+            .andExpect(noFault())
+
+        verify(telemetryService, times(2)).trackEvent(
+            COURT_LIST_MESSAGE_RECEIVED,
+            mapOf(
+                "courtCode" to "B10JQ",
+                "courtRoom" to "0",
+                "hearingDate" to "2020-10-26",
+                "fileName" to "5_26102020_2992_B10JQ00_ADULT_COURT_LIST_DAILY",
+            ),
+        )
+
+        val firstCase = CaseDetails(caseNo = 166662981, defendantName = "MR Abraham LINCOLN", pnc = "20030011985X", cro = "CR0006100061")
+        val secondCase = CaseDetails(caseNo = 1777732980, defendantName = "Mr Theremin MELLOTRON", pnc = "20120052494Q", cro = "CR0006200062")
+
+        assertThat(checkMessage(listOf(firstCase, secondCase))).hasSize(2)
+
+        checkS3Upload("2020-10-26-B10")
+    }
+
+    @Test
     fun `should not enqueue message when court is not processed but return acknowledgement`() {
         val externalDoc1 = readFile("src/test/resources/soap/ignored-courts.xml")
         val requestEnvelope: Source = StringSource(externalDoc1)
@@ -176,15 +225,20 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
 
     private fun readFile(fileName: String): String = File(fileName).readText(Charsets.UTF_8)
 
-    private fun checkMessage(expectedCases: List<CaseDetails>) {
-        var cases = mutableListOf<CaseDetails>()
+    private fun checkMessage(expectedCases: List<CaseDetails>): MutableList<CaseDetails> {
+        val cases = mutableListOf<CaseDetails>()
         while (countMessagesOnQueue() > 0) {
             val message = courtCaseEventsQueue?.sqsClient?.receiveMessage(ReceiveMessageRequest.builder().queueUrl(courtCaseEventsQueue?.queueUrl!!).build())!!.get()
-            val sqsMessage: SQSMessage = objectMapper.readValue(message.messages()[0].body(), SQSMessage::class.java)
+            val messageDetails = message.messages()
+            if (messageDetails.isEmpty()) {
+                continue
+            }
+            val sqsMessage: SQSMessage = objectMapper.readValue(messageDetails[0].body(), SQSMessage::class.java)
 
             cases.add(objectMapper.readValue(sqsMessage.message, CaseDetails::class.java))
         }
         assertThat(cases).containsAll(expectedCases)
+        return cases
     }
 
     companion object {
