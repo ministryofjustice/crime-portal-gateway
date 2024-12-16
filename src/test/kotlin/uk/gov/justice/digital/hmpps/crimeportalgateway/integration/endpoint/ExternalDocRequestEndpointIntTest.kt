@@ -153,7 +153,7 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
         val firstCase = CaseDetails(caseNo = 166662981, defendantName = "MR Abraham LINCOLN", pnc = "20030011985X", cro = "CR0006100061")
         val secondCase = CaseDetails(caseNo = 1777732980, defendantName = "Mr Theremin MELLOTRON", pnc = "20120052494Q", cro = "CR0006200062")
 
-        assertThat(checkMessage(listOf(firstCase, secondCase))).hasSize(2)
+        checkMessage(listOf(firstCase, secondCase))
         checkQueueIsEmpty()
 
         checkS3Upload("2020-10-26-B10")
@@ -227,7 +227,7 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
 
     private fun readFile(fileName: String): String = File(fileName).readText(Charsets.UTF_8)
 
-    private fun checkMessage(expectedCases: List<CaseDetails>): MutableList<CaseDetails> {
+    private fun checkMessage(expectedCases: List<CaseDetails>) {
         val cases = mutableListOf<CaseDetails>()
         await().until { countMessagesOnQueue() == 2 }
         while (countMessagesOnQueue() > 0) {
@@ -240,7 +240,7 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
             )
         }
         assertThat(cases).containsAll(expectedCases)
-        return cases
+        assertThat(cases).containsOnly(expectedCases[0], expectedCases[1])
     }
 
     companion object {
