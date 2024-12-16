@@ -35,7 +35,7 @@ generic-service:
     crime-portal-gateway:
       APPINSIGHTS_INSTRUMENTATIONKEY: "APPINSIGHTS_INSTRUMENTATIONKEY"
     court-cases-topic:
-      HMPPS_SQS_TOPICS_COURTCASEEVENTSTOPIC_ARN: topic_arn
+      HMPPS_SQS_TOPICS_COURTCASESTOPIC_ARN: topic_arn
     crime-portal-gateway-s3-credentials:
       aws_s3_bucket_name: bucket_name
     crime-portal-gateway-secrets:

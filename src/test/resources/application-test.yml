@@ -13,13 +13,13 @@ hmpps.sqs:
   enabled: true
   provider: localstack
   queues:
-    courtcaseeventsqueue:
+    courtcasesqueue:
       queueName: court_cases_queue.fifo
-      subscribeTopicId: courtcaseeventstopic
+      subscribeTopicId: courtcasestopic
       dlqName: cpr_court_cases_queue_dlq.fifo
       dlqMaxReceiveCount: 1
   topics:
-    courtcaseeventstopic:
+    courtcasestopic:
       arn: "arn:aws:sns:eu-west-2:000000000000:court-cases-topic.fifo"
 
 # Localstack settings for S3

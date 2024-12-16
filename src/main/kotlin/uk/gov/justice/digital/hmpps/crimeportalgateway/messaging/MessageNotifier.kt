@@ -20,7 +20,7 @@ class MessageNotifier(
     private val hmppsQueueService: HmppsQueueService,
 ) {
     private val topic =
-        hmppsQueueService.findByTopicId("courtcaseeventstopic")
+        hmppsQueueService.findByTopicId("courtcasestopic")
             ?: throw MissingTopicException("Could not find topic ")
 
     fun send(case: Case) {

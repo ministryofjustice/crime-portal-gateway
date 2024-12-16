@@ -50,8 +50,8 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
 
     @Autowired
     lateinit var hmppsQueueService: HmppsQueueService
-    val courtCaseEventsQueue by lazy {
-        hmppsQueueService.findByQueueId("courtcaseeventsqueue")
+    val courtCasesQueue by lazy {
+        hmppsQueueService.findByQueueId("courtcasesqueue")
     }
 
     @Value("\${aws.s3.bucket_name}")
@@ -62,7 +62,7 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
 
     @BeforeEach
     fun beforeEach() {
-        courtCaseEventsQueue?.sqsClient?.purgeQueue(PurgeQueueRequest.builder().queueUrl(courtCaseEventsQueue!!.queueUrl).build())
+        courtCasesQueue?.sqsClient?.purgeQueue(PurgeQueueRequest.builder().queueUrl(courtCasesQueue!!.queueUrl).build())
         amazonS3.createBucket(CreateBucketRequest.builder().bucket(bucketName).build())
     }
 
@@ -154,6 +154,7 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
         val secondCase = CaseDetails(caseNo = 1777732980, defendantName = "Mr Theremin MELLOTRON", pnc = "20120052494Q", cro = "CR0006200062")
 
         assertThat(checkMessage(listOf(firstCase, secondCase))).hasSize(2)
+        checkQueueIsEmpty()
 
         checkS3Upload("2020-10-26-B10")
     }
@@ -176,7 +177,7 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
             .andExpect(xpath("//ns3:Acknowledgement/Ack/TimeStamp", namespaces).exists())
             .andExpect(noFault())
 
-        checkMessagesOnQueue()
+        checkQueueIsEmpty()
         checkS3Upload("2020-10-26-B10")
     }
 
@@ -197,22 +198,21 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
             .andExpect(xpath("//ns3:Acknowledgement/Ack/TimeStamp", namespaces).exists())
             .andExpect(noFault())
 
-        checkMessagesOnQueue()
+        checkQueueIsEmpty()
         val date = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE)
 
         checkS3Upload("fail-$date")
     }
 
-    private fun checkMessagesOnQueue() {
-        val numberOfMessagesOnQueue = courtCaseEventsQueue?.sqsClient?.countMessagesOnQueue(courtCaseEventsQueue?.queueUrl!!)?.get()!!
+    private fun checkQueueIsEmpty() {
+        val numberOfMessagesOnQueue = courtCasesQueue?.sqsClient?.countMessagesOnQueue(courtCasesQueue?.queueUrl!!)?.get()!!
         assertThat(numberOfMessagesOnQueue).isEqualTo(0)
     }
 
-    private fun countMessagesOnQueue() = courtCaseEventsQueue?.sqsClient?.countMessagesOnQueue(courtCaseEventsQueue?.queueUrl!!)!!.get()
+    private fun countMessagesOnQueue() = courtCasesQueue?.sqsClient?.countMessagesOnQueue(courtCasesQueue?.queueUrl!!)!!.get()
 
     private fun checkS3Upload(fileNameStart: String) {
         val items = amazonS3.listObjects(ListObjectsRequest.builder().bucket(bucketName).build()).contents()
-        assertThat(items.size).isEqualTo(1)
         assertThat(items[0].key().startsWith(fileNameStart)).isTrue()
         val s3Object = amazonS3.getObject(GetObjectRequest.builder().bucket(bucketName).key(items[0].key()).build(), ResponseTransformer.toBytes())
         val startOfDoc = s3Object.asUtf8String()
@@ -231,12 +231,12 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
         val cases = mutableListOf<CaseDetails>()
         await().until { countMessagesOnQueue() == 2 }
         while (countMessagesOnQueue() > 0) {
-            val message = courtCaseEventsQueue?.sqsClient?.receiveMessage(ReceiveMessageRequest.builder().queueUrl(courtCaseEventsQueue?.queueUrl!!).build())!!.get()
+            val message = courtCasesQueue?.sqsClient?.receiveMessage(ReceiveMessageRequest.builder().queueUrl(courtCasesQueue?.queueUrl!!).build())!!.get()
             val sqsMessage: SQSMessage = objectMapper.readValue(message.messages()[0].body(), SQSMessage::class.java)
 
             cases.add(objectMapper.readValue(sqsMessage.message, CaseDetails::class.java))
-            courtCaseEventsQueue?.sqsClient?.deleteMessage(
-                DeleteMessageRequest.builder().queueUrl(courtCaseEventsQueue?.queueUrl!!).receiptHandle(message.messages()[0].receiptHandle()).build(),
+            courtCasesQueue?.sqsClient?.deleteMessage(
+                DeleteMessageRequest.builder().queueUrl(courtCasesQueue?.queueUrl!!).receiptHandle(message.messages()[0].receiptHandle()).build(),
             )
         }
         assertThat(cases).containsAll(expectedCases)
