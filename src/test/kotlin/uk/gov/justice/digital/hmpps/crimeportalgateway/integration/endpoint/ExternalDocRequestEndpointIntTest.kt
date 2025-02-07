@@ -103,8 +103,8 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
             ),
         )
 
-        val firstCase = CaseDetails(caseNo = 166662981, defendantName = "MR Abraham LINCOLN", pnc = "20030011985X", cro = "CR0006100061")
-        val secondCase = CaseDetails(caseNo = 1777732980, defendantName = "Mr Theremin MELLOTRON", pnc = "20120052494Q", cro = "CR0006200062")
+        val firstCase = CaseDetails(caseNo = 166662981, cId = 1218461, defendantName = "MR Abraham LINCOLN", pnc = "20030011985X", cro = "CR0006100061")
+        val secondCase = CaseDetails(caseNo = 1777732980, cId = 1218888, defendantName = "Mr Theremin MELLOTRON", pnc = "20120052494Q", cro = "CR0006200062")
         checkMessage(listOf(firstCase, secondCase))
 
         checkS3Upload("2020-10-26-B10")
@@ -150,8 +150,8 @@ class ExternalDocRequestEndpointIntTest : IntegrationTestBase() {
             ),
         )
 
-        val firstCase = CaseDetails(caseNo = 166662981, defendantName = "MR Abraham LINCOLN", pnc = "20030011985X", cro = "CR0006100061")
-        val secondCase = CaseDetails(caseNo = 1777732980, defendantName = "Mr Theremin MELLOTRON", pnc = "20120052494Q", cro = "CR0006200062")
+        val firstCase = CaseDetails(caseNo = 166662981, cId = 1218461, defendantName = "MR Abraham LINCOLN", pnc = "20030011985X", cro = "CR0006100061")
+        val secondCase = CaseDetails(caseNo = 1777732980, cId = 1218888, defendantName = "Mr Theremin MELLOTRON", pnc = "20120052494Q", cro = "CR0006200062")
 
         checkMessage(listOf(firstCase, secondCase))
         checkQueueIsEmpty()
@@ -269,6 +269,7 @@ data class SQSMessage(
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class CaseDetails(
     val caseNo: Int,
+    val cId: Int,
     val defendantName: String,
     val cro: String,
     val pnc: String,
