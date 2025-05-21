@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonGetter
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.OptBoolean
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
@@ -19,7 +20,8 @@ import java.time.LocalDateTime
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class Case(
     @JacksonXmlProperty(localName = "c_id")
-    val caseId: Long? = null,
+    @get:JsonProperty("cId")
+    val cId: String? = null,
     @field:NotBlank
     @JacksonXmlProperty(localName = "caseno")
     val caseNo: String?,
