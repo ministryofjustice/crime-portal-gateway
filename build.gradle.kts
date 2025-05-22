@@ -25,7 +25,7 @@ dependencies {
     implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:5.2.1")
     implementation("org.springframework.boot:spring-boot-starter-web")
 
-    implementation("org.springframework.ws:spring-ws-security:4.0.11") {
+    implementation("org.springframework.ws:spring-ws-security:4.0.14") {
         exclude(group = "org.bouncycastle", module = "bcprov-jdk15on")
             .because("OWASP found security Issues")
         exclude(group = "org.cryptacular", module = "cryptacular")
