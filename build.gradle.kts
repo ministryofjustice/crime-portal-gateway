@@ -31,7 +31,7 @@ dependencies {
             .because("OWASP found security Issues")
         exclude(group = "org.apache.santuario", module = "xmlsec")
             .because("OWASP found security Issues")
-        implementation("org.apache.santuario:xmlsec:3.0.0")
+        implementation("org.apache.santuario:xmlsec:3.0.6")
     }
 
     implementation("com.microsoft.azure:applicationinsights-web:3.5.4")
