@@ -34,7 +34,7 @@ dependencies {
         implementation("org.apache.santuario:xmlsec:3.0.0")
     }
 
-    implementation("com.microsoft.azure:applicationinsights-web:3.5.4")
+    implementation("com.microsoft.azure:applicationinsights-web:3.7.2")
 
     api("software.amazon.awssdk:s3")
     implementation("wsdl4j:wsdl4j:1.6.3")
