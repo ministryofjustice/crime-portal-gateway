@@ -49,7 +49,7 @@ dependencies {
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.12.2")
 
-    testImplementation("org.springframework.ws:spring-ws-test:4.0.11")
+    testImplementation("org.springframework.ws:spring-ws-test:4.1.0")
 }
 
 xjc {
