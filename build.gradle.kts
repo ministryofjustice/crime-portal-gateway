@@ -42,7 +42,7 @@ dependencies {
     xjcTool("com.sun.xml.bind:jaxb-xjc:3.0.2")
     xjcTool("com.sun.xml.bind:jaxb-impl:3.0.2")
 
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.4")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.19.0")
 
     runtimeOnly("org.apache.ws.xmlschema", "xmlschema-core", "2.2.5")
     runtimeOnly("org.glassfish.jaxb:jaxb-runtime:4.0.5")
