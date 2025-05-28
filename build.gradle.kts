@@ -37,7 +37,7 @@ dependencies {
     implementation("com.sun.xml.bind:jaxb-impl:4.0.5") {
         exclude(group = "com.sun.xml.bind", module = "jaxb-core")
     }
-    implementation("jakarta.xml.bind:jakarta.xml.bind-api:3.0.1")
+    implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.2")
 
     xjcTool("com.sun.xml.bind:jaxb-xjc:3.0.2")
     xjcTool("com.sun.xml.bind:jaxb-impl:3.0.2")
