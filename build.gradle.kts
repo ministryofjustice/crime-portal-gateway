@@ -37,7 +37,7 @@ dependencies {
 //    implementation("com.sun.xml.bind:jaxb-impl:4.0.5") {
 //        exclude(group = "com.sun.xml.bind", module = "jaxb-core")
 //    }
-    implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.0")
+    implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.4")
     implementation("org.glassfish.jaxb:jaxb-runtime:4.0.4")
 
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.19.2")
