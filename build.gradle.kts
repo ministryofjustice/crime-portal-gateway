@@ -37,13 +37,13 @@ dependencies {
     implementation("com.sun.xml.bind:jaxb-impl:4.0.5") {
         exclude(group = "com.sun.xml.bind", module = "jaxb-core")
     }
-    implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.4")
-    implementation("org.glassfish.jaxb:jaxb-runtime:4.0.5")
+    implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.0")
+    implementation("org.glassfish.jaxb:jaxb-runtime:4.0.4")
 
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.19.2")
 
     runtimeOnly("org.apache.ws.xmlschema", "xmlschema-core", "2.3.2")
-    //runtimeOnly("org.glassfish.jaxb:jaxb-runtime:4.0.5")
+    runtimeOnly("org.glassfish.jaxb:jaxb-runtime:4.0.5")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.13.4")
 
