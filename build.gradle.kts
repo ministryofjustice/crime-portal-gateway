@@ -34,9 +34,6 @@ dependencies {
 
     api("software.amazon.awssdk:s3")
     implementation("wsdl4j:wsdl4j:1.6.3")
-//    implementation("com.sun.xml.bind:jaxb-impl:4.0.5") {
-//        exclude(group = "com.sun.xml.bind", module = "jaxb-core")
-//    }
     implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.4")
     implementation("org.glassfish.jaxb:jaxb-runtime:4.0.4")
 
