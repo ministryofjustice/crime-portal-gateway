@@ -72,7 +72,7 @@ tasks.named("compileKotlin") {
     dependsOn("xjc")
 }
 
-tasks.named("runKtlintCheckOverMainSourceSet" ) {
+tasks.named("runKtlintCheckOverMainSourceSet") {
     dependsOn("xjc")
 }
 
