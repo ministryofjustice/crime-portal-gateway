@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("uk.gov.justice.hmpps.gradle-spring-boot") version "9.3.0"
     kotlin("plugin.spring") version "2.3.0"
-    id("org.unbroken-dome.xjc") version "2.0.0"
+    id("com.github.bjornvester.xjc") version "1.9.0"
     kotlin("jvm") version "2.3.0"
 }
 
@@ -34,13 +34,8 @@ dependencies {
 
     api("software.amazon.awssdk:s3")
     implementation("wsdl4j:wsdl4j:1.6.3")
-    implementation("com.sun.xml.bind:jaxb-impl:4.0.5") {
-        exclude(group = "com.sun.xml.bind", module = "jaxb-core")
-    }
     implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.4")
-
-    xjcTool("com.sun.xml.bind:jaxb-xjc:3.0.2")
-    xjcTool("com.sun.xml.bind:jaxb-impl:4.0.5")
+    implementation("org.glassfish.jaxb:jaxb-runtime:4.0.4")
 
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.19.2")
     implementation("io.sentry:sentry-spring-boot-starter-jakarta:8.29.0")
@@ -54,13 +49,9 @@ dependencies {
 }
 
 xjc {
-    srcDirName.set("resources/xsd")
-    extension.set(true)
-    xjcVersion.set("3.0")
-}
-
-sourceSets.named("main") {
-    xjcBinding.srcDir("resources/xsd")
+    xsdDir.set(layout.projectDirectory.dir("src/main/resources/xsd"))
+    outputJavaDir.set(layout.buildDirectory.dir("generated/sources/xjc"))
+    useJakarta.set(true)
 }
 
 tasks {
@@ -73,6 +64,14 @@ tasks {
 
 tasks.named("assemble") {
     dependsOn("copyAgentConfig")
+}
+
+tasks.named("compileKotlin") {
+    dependsOn("xjc")
+}
+
+tasks.named("runKtlintCheckOverMainSourceSet") {
+    dependsOn("xjc")
 }
 
 tasks.withType<KotlinCompile> {
