@@ -27,7 +27,7 @@ dependencies {
 
     implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:5.4.10")
 
-    implementation("org.springframework.ws:spring-ws-security:4.1.1") {
+    implementation("org.springframework.ws:spring-ws-security:5.0.0") {
         exclude(group = "org.bouncycastle", module = "bcprov-jdk18on")
     }
     implementation("com.microsoft.azure:applicationinsights-web:3.7.6")
@@ -50,7 +50,7 @@ dependencies {
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.13.4")
 
-    testImplementation("org.springframework.ws:spring-ws-test:4.1.1")
+    testImplementation("org.springframework.ws:spring-ws-test:5.0.0")
 }
 
 xjc {
