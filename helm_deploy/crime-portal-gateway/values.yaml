@@ -24,6 +24,7 @@ generic-service:
     SERVER_PORT: "8081"
     APPLICATIONINSIGHTS_CONNECTION_STRING: "InstrumentationKey=$(APPINSIGHTS_INSTRUMENTATIONKEY)"
     APPLICATIONINSIGHTS_CONFIGURATION_FILE: applicationinsights.json
+    SENTRY_TRACES_SAMPLE_RATE: '0.05'
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:
@@ -42,6 +43,8 @@ generic-service:
       private-key-password: PRIVATE_KEY_PASSWORD
       trusted-cert-alias-name: TRUSTED_CERT_ALIAS_NAME
       private-key-alias-name: PRIVATE_KEY_ALIAS_NAME
+    crime-portal-gateway-sentry:
+      SENTRY_DSN: SENTRY_DSN
 
   volumes:
     - name: secrets

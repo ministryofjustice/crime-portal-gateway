@@ -10,6 +10,7 @@ generic-service:
 
   env:
     SPRING_PROFILES_ACTIVE: "preprod,secure,logstash"
+    SENTRY_ENVIRONMENT: preprod
 
   allowlist:
     cgi-test-env: "51.140.207.121/32"
