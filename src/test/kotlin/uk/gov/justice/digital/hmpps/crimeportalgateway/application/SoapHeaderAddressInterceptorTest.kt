@@ -38,7 +38,7 @@ class SoapHeaderAddressInterceptorTest {
         whenever(messageContext.response).thenReturn(saajSoapResponse)
         whenever(messageContext.request).thenReturn(saajSoapRequest)
 
-        assertThat(interceptor.handleResponse(messageContext, null)).isTrue
+        assertThat(interceptor.handleResponse(messageContext, "test")).isTrue
     }
 
     @Test
@@ -56,7 +56,7 @@ class SoapHeaderAddressInterceptorTest {
             .thenReturn(fromElement)
         val addressElement: SOAPElement = mockElementChild(fromElement, "Address")
 
-        assertThat(interceptor.handleResponse(messageContext, null)).isTrue
+        assertThat(interceptor.handleResponse(messageContext, "test")).isTrue
 
         verify(actionElement).addTextNode("externalDocument")
         verify(messageIdElement).addTextNode(anyString())
@@ -71,7 +71,7 @@ class SoapHeaderAddressInterceptorTest {
         val saajSoapMessage = mock(SaajSoapMessage::class.java)
         `when`(messageContext.response).thenReturn(saajSoapMessage)
 
-        assertThat(interceptor.handleFault(messageContext, null)).isTrue
+        assertThat(interceptor.handleFault(messageContext, "test")).isTrue
 
         verify(telemetryService).trackEvent(TelemetryEventType.COURT_LIST_MESSAGE_ERROR)
     }

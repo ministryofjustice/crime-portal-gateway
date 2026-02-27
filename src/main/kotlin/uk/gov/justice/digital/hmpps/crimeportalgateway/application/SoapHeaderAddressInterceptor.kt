@@ -20,13 +20,13 @@ class SoapHeaderAddressInterceptor(
     private val telemetryService: TelemetryService,
 ) : EndpointInterceptor {
     override fun handleRequest(
-        p0: MessageContext?,
-        p1: Any?,
+        p0: MessageContext,
+        p1: Any,
     ): Boolean = true
 
     override fun handleResponse(
         messageContext: MessageContext,
-        p1: Any?,
+        p1: Any,
     ): Boolean {
         val soapResponseMessage = messageContext.response as SaajSoapMessage
         val soapRequestMessage = messageContext.request as SaajSoapMessage
@@ -72,7 +72,7 @@ class SoapHeaderAddressInterceptor(
 
     override fun handleFault(
         messageContext: MessageContext,
-        p1: Any?,
+        p1: Any,
     ): Boolean {
         telemetryService.trackEvent(TelemetryEventType.COURT_LIST_MESSAGE_ERROR)
         val buffer = ByteArrayOutputStream()
