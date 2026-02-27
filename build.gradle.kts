@@ -4,7 +4,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("uk.gov.justice.hmpps.gradle-spring-boot") version "9.3.0"
     kotlin("plugin.spring") version "2.3.10"
-    id("org.unbroken-dome.xjc") version "2.0.0"
     kotlin("jvm") version "2.3.10"
 }
 
@@ -39,9 +38,6 @@ dependencies {
     }
     implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.4")
 
-    xjcTool("com.sun.xml.bind:jaxb-xjc:3.0.2")
-    xjcTool("com.sun.xml.bind:jaxb-impl:4.0.5")
-
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.19.2")
     implementation("io.sentry:sentry-spring-boot-starter-jakarta:8.33.0")
 
@@ -51,16 +47,6 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.14.3")
 
     testImplementation("org.springframework.ws:spring-ws-test:4.1.1")
-}
-
-xjc {
-    srcDirName.set("resources/xsd")
-    extension.set(true)
-    xjcVersion.set("3.0")
-}
-
-sourceSets.named("main") {
-    xjcBinding.srcDir("resources/xsd")
 }
 
 tasks {
