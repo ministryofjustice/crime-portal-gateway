@@ -23,7 +23,6 @@ dependencyCheck {
 }
 
 dependencies {
-
     implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:7.0.1")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.ws:spring-ws-security:4.1.1") {
