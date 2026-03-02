@@ -3,29 +3,29 @@ package uk.gov.justice.digital.hmpps.crimeportalgateway.integration.health
 import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.web.server.LocalServerPort
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
 import org.springframework.context.annotation.Import
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.get
 import uk.gov.justice.digital.hmpps.crimeportalgateway.application.TestMessagingConfig
 import uk.gov.justice.digital.hmpps.crimeportalgateway.integration.IntegrationTestBase
-import java.net.HttpURLConnection
-import java.net.URL
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
+@AutoConfigureMockMvc
 @Import(TestMessagingConfig::class)
 class InfoTest : IntegrationTestBase() {
-    @LocalServerPort
-    var port: Int = 0
+    @Autowired
+    lateinit var mockMvc: MockMvc
 
     private fun getInfoJson(): JSONObject {
-        val url = URL("http://localhost:$port/info")
-        val conn = url.openConnection() as HttpURLConnection
-        conn.requestMethod = "GET"
-        conn.connect()
-        val body = conn.inputStream.bufferedReader().readText()
-        conn.disconnect()
+        val mvcResult = mockMvc.get("/info") {
+            accept(org.springframework.http.MediaType.APPLICATION_JSON)
+        }.andReturn()
+        val body = mvcResult.response.contentAsString
         return JSONObject(body)
     }
 

@@ -24,6 +24,7 @@ dependencyCheck {
 
 dependencies {
     implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:7.0.1")
+    implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-autoconfigure:7.0.1")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.ws:spring-ws-security:4.1.1") {
         exclude(group = "org.bouncycastle", module = "bcprov-jdk18on")
@@ -43,12 +44,11 @@ dependencies {
     runtimeOnly("org.apache.ws.xmlschema", "xmlschema-core", "2.3.2")
     runtimeOnly("org.glassfish.jaxb:jaxb-runtime:4.0.5")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test") {
-        exclude(group = "org.springframework.boot", module = "spring-boot-starter-webflux")
-    }
+    testImplementation("org.springframework.boot:spring-boot-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
+    testImplementation("org.springframework.boot:spring-boot-test-autoconfigure")
 
     testImplementation("org.springframework.ws:spring-ws-test:4.1.1")
-    testImplementation("jakarta.servlet:jakarta.servlet-api:6.0.0")
 }
 
 tasks {
