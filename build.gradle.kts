@@ -24,7 +24,7 @@ dependencyCheck {
 
 dependencies {
 
-    implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:5.6.2") {
+    implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:7.0.1") {
         exclude(group = "org.springframework.boot", module = "spring-boot-dependencies")
     }
 
