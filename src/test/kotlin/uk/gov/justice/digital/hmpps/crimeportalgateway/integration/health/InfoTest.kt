@@ -22,9 +22,11 @@ class InfoTest : IntegrationTestBase() {
     lateinit var mockMvc: MockMvc
 
     private fun getInfoJson(): JSONObject {
-        val mvcResult = mockMvc.get("/info") {
-            accept(org.springframework.http.MediaType.APPLICATION_JSON)
-        }.andReturn()
+        val mvcResult =
+            mockMvc
+                .get("/info") {
+                    accept(org.springframework.http.MediaType.APPLICATION_JSON)
+                }.andReturn()
         val body = mvcResult.response.contentAsString
         return JSONObject(body)
     }

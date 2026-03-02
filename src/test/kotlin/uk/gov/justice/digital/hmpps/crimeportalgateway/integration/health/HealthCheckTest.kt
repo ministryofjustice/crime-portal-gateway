@@ -22,9 +22,11 @@ class HealthCheckTest : IntegrationTestBase() {
     lateinit var mockMvc: MockMvc
 
     private fun getResponse(path: String): Pair<Int, String> {
-        val mvcResult = mockMvc.get(path) {
-            accept(MediaType.APPLICATION_JSON)
-        }.andReturn()
+        val mvcResult =
+            mockMvc
+                .get(path) {
+                    accept(MediaType.APPLICATION_JSON)
+                }.andReturn()
         val status = mvcResult.response.status
         val body = mvcResult.response.contentAsString
         return status to body
