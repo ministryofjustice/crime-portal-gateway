@@ -42,7 +42,7 @@ dependencies {
     implementation("io.sentry:sentry-spring-boot-starter-jakarta:8.33.0")
 
     runtimeOnly("org.apache.ws.xmlschema", "xmlschema-core", "2.3.2")
-    runtimeOnly("org.glassfish.jaxb:jaxb-runtime:4.0.5")
+    runtimeOnly("org.glassfish.jaxb:jaxb-runtime:4.0.6")
 
     testImplementation("org.springframework.boot:spring-boot-test")
     testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
