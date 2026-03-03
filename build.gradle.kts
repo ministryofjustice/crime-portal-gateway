@@ -48,7 +48,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
     testImplementation("org.springframework.boot:spring-boot-test-autoconfigure")
 
-    testImplementation("org.springframework.ws:spring-ws-test:4.1.1")
+    testImplementation("org.springframework.ws:spring-ws-test:4.1.2")
 }
 
 tasks {
