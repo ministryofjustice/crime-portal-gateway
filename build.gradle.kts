@@ -26,7 +26,7 @@ dependencies {
     implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:7.0.1")
     implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-autoconfigure:7.0.1")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.springframework.ws:spring-ws-security:4.1.1") {
+    implementation("org.springframework.ws:spring-ws-security:5.0.0") {
         exclude(group = "org.bouncycastle", module = "bcprov-jdk18on")
     }
     implementation("com.microsoft.azure:applicationinsights-web:3.7.7")
