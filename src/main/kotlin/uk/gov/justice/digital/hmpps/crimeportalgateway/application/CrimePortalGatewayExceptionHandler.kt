@@ -26,7 +26,7 @@ class CrimePortalGatewayExceptionHandler {
     }
 
     @ExceptionHandler(java.lang.Exception::class)
-    fun handleException(e: java.lang.Exception): ResponseEntity<ErrorResponse?>? {
+    fun handleException(e: java.lang.Exception): ResponseEntity<ErrorResponse> {
         log.error("Unexpected exception", e)
         return ResponseEntity
             .status(INTERNAL_SERVER_ERROR)
