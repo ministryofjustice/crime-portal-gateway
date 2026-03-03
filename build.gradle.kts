@@ -38,7 +38,7 @@ dependencies {
     }
     implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.4")
 
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.19.2")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.21.1")
     implementation("io.sentry:sentry-spring-boot-starter-jakarta:8.33.0")
 
     runtimeOnly("org.apache.ws.xmlschema", "xmlschema-core", "2.3.2")
