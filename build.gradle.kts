@@ -26,6 +26,9 @@ dependencies {
     implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:7.0.1")
     implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-autoconfigure:7.0.1")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
+
+
     implementation("org.springframework.ws:spring-ws-security:4.1.1") {
         exclude(group = "org.bouncycastle", module = "bcprov-jdk18on")
     }
