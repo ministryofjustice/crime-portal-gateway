@@ -33,16 +33,16 @@ dependencies {
 
     api("software.amazon.awssdk:s3")
     implementation("wsdl4j:wsdl4j:1.6.3")
-    implementation("com.sun.xml.bind:jaxb-impl:4.0.5") {
+    implementation("com.sun.xml.bind:jaxb-impl:4.0.6") {
         exclude(group = "com.sun.xml.bind", module = "jaxb-core")
     }
-    implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.4")
+    implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.5")
 
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.19.2")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.21.1")
     implementation("io.sentry:sentry-spring-boot-starter-jakarta:8.33.0")
 
     runtimeOnly("org.apache.ws.xmlschema", "xmlschema-core", "2.3.2")
-    runtimeOnly("org.glassfish.jaxb:jaxb-runtime:4.0.5")
+    runtimeOnly("org.glassfish.jaxb:jaxb-runtime:4.0.6")
 
     testImplementation("org.springframework.boot:spring-boot-test")
     testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
