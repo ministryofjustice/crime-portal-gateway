@@ -2,9 +2,9 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("uk.gov.justice.hmpps.gradle-spring-boot") version "10.0.4"
-    kotlin("plugin.spring") version "2.3.10"
-    kotlin("jvm") version "2.3.10"
+    id("uk.gov.justice.hmpps.gradle-spring-boot") version "10.0.5"
+    kotlin("plugin.spring") version "2.3.20"
+    kotlin("jvm") version "2.3.20"
 }
 
 repositories {
@@ -23,8 +23,8 @@ dependencyCheck {
 }
 
 dependencies {
-    implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:7.0.1")
-    implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-autoconfigure:7.0.1")
+    implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:7.1.0")
+    implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-autoconfigure:7.1.0")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
 
@@ -35,16 +35,16 @@ dependencies {
 
     api("software.amazon.awssdk:s3")
     implementation("wsdl4j:wsdl4j:1.6.3")
-    implementation("com.sun.xml.bind:jaxb-impl:4.0.6") {
+    implementation("com.sun.xml.bind:jaxb-impl:4.0.7") {
         exclude(group = "com.sun.xml.bind", module = "jaxb-core")
     }
     implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.5")
 
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.21.1")
-    implementation("io.sentry:sentry-spring-boot-4-starter:8.33.0")
+    implementation("io.sentry:sentry-spring-boot-4-starter:8.35.0")
 
     runtimeOnly("org.apache.ws.xmlschema", "xmlschema-core", "2.3.2")
-    runtimeOnly("org.glassfish.jaxb:jaxb-runtime:4.0.6")
+    runtimeOnly("org.glassfish.jaxb:jaxb-runtime:4.0.7")
 
     testImplementation("org.springframework.boot:spring-boot-test")
     testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
