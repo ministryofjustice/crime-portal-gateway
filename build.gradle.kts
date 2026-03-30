@@ -28,7 +28,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
 
-    implementation("org.springframework.ws:spring-ws-security:4.1.1") {
+    implementation("org.springframework.ws:spring-ws-security:5.0.1") {
         exclude(group = "org.bouncycastle", module = "bcprov-jdk18on")
     }
     implementation("com.microsoft.azure:applicationinsights-web:3.7.8")
@@ -50,7 +50,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
     testImplementation("org.springframework.boot:spring-boot-test-autoconfigure")
 
-    testImplementation("org.springframework.ws:spring-ws-test:4.1.1")
+    testImplementation("org.springframework.ws:spring-ws-test:5.0.1")
 }
 
 tasks {
