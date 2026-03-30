@@ -23,15 +23,15 @@ dependencyCheck {
 }
 
 dependencies {
-    implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:7.2.0")
-    implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-autoconfigure:7.2.0")
+    implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:7.3.0")
+    implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-autoconfigure:7.3.0")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
 
     implementation("org.springframework.ws:spring-ws-security:4.1.1") {
         exclude(group = "org.bouncycastle", module = "bcprov-jdk18on")
     }
-    implementation("com.microsoft.azure:applicationinsights-web:3.7.7")
+    implementation("com.microsoft.azure:applicationinsights-web:3.7.8")
 
     api("software.amazon.awssdk:s3")
     implementation("wsdl4j:wsdl4j:1.6.3")
@@ -41,7 +41,7 @@ dependencies {
     implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.5")
 
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.21.2")
-    implementation("io.sentry:sentry-spring-boot-4-starter:8.36.0")
+    implementation("io.sentry:sentry-spring-boot-4-starter:8.37.1")
 
     runtimeOnly("org.apache.ws.xmlschema", "xmlschema-core", "2.3.2")
     runtimeOnly("org.glassfish.jaxb:jaxb-runtime:4.0.6")
