@@ -12,16 +12,16 @@ import org.springframework.ws.soap.security.wss4j2.support.CryptoFactoryBean
 @Profile("secure")
 @Configuration
 class WebServiceSecurityConfig(
-    @Value("\${keystore-password}") private val keystorePassword: String,
-    @Value("\${private-key-password}") private val privateKeyPassword: String,
-    @Value("\${ws-sec.request-encrypt-actions}") private val requestActions: String,
-    @Value("\${ws-sec.response-encrypt-actions}") private val responseActions: String,
-    @Value("\${ws-sec.response-signature-parts}") private val responseSignatureParts: String,
-    @Value("\${ws-sec.response-encryption-parts}") private val responseEncryptionParts: String,
-    @Value("\${trusted-cert-alias-name}") private val trustedCertAliasName: String,
-    @Value("\${private-key-alias-name}") private val privateKeyAliasName: String,
-    @Value("\${ws-sec.keystore-file-path}") private val keystoreFilePath: String,
-    @Value("\${ws-sec.encryption-sym-algorithm}") private val encryptionAlgorithm: String,
+    @param:Value("\${keystore-password}") private val keystorePassword: String,
+    @param:Value("\${private-key-password}") private val privateKeyPassword: String,
+    @param:Value("\${ws-sec.request-encrypt-actions}") private val requestActions: String,
+    @param:Value("\${ws-sec.response-encrypt-actions}") private val responseActions: String,
+    @param:Value("\${ws-sec.response-signature-parts}") private val responseSignatureParts: String,
+    @param:Value("\${ws-sec.response-encryption-parts}") private val responseEncryptionParts: String,
+    @param:Value("\${trusted-cert-alias-name}") private val trustedCertAliasName: String,
+    @param:Value("\${private-key-alias-name}") private val privateKeyAliasName: String,
+    @param:Value("\${ws-sec.keystore-file-path}") private val keystoreFilePath: String,
+    @param:Value("\${ws-sec.encryption-sym-algorithm}") private val encryptionAlgorithm: String,
 ) {
     @Bean
     @Throws(Exception::class)
@@ -47,14 +47,14 @@ class WebServiceSecurityConfig(
 
         // validate incoming request
         securityInterceptor.setValidationActions(requestActions)
-        securityInterceptor.setValidationSignatureCrypto(getValidationCryptoFactoryBean().getObject())
-        securityInterceptor.setValidationDecryptionCrypto(getValidationCryptoFactoryBean().getObject())
+        securityInterceptor.setValidationSignatureCrypto(getValidationCryptoFactoryBean().getObject()!!)
+        securityInterceptor.setValidationDecryptionCrypto(getValidationCryptoFactoryBean().getObject()!!)
         securityInterceptor.setValidationCallbackHandler(keyStoreCallbackHandler())
 
         // encrypt the response
         securityInterceptor.setSecurementEncryptionUser(privateKeyAliasName)
         securityInterceptor.setSecurementEncryptionParts(responseEncryptionParts)
-        securityInterceptor.setSecurementEncryptionCrypto(getValidationCryptoFactoryBean().getObject())
+        securityInterceptor.setSecurementEncryptionCrypto(getValidationCryptoFactoryBean().getObject()!!)
         securityInterceptor.setSecurementEncryptionSymAlgorithm(encryptionAlgorithm)
 
         // sign the response
@@ -62,7 +62,7 @@ class WebServiceSecurityConfig(
         securityInterceptor.setSecurementUsername(trustedCertAliasName)
         securityInterceptor.setSecurementPassword(privateKeyPassword)
         securityInterceptor.setSecurementSignatureParts(responseSignatureParts)
-        securityInterceptor.setSecurementSignatureCrypto(getValidationCryptoFactoryBean().getObject())
+        securityInterceptor.setSecurementSignatureCrypto(getValidationCryptoFactoryBean().getObject()!!)
         return securityInterceptor
     }
 }
