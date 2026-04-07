@@ -27,13 +27,13 @@ jobs:
       matrix:
         environments: ['dev', 'preprod', 'prod']
     name: helm lint
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/test_helm_lint.yml@v2 # WORKFLOW_VERSION
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/test_helm_lint.yml@d79e83be2cc392b981dd92c8f6f85007d18032e9 # v2.10.1
     secrets: inherit
     with:
       environment: ${{ matrix.environments }}
   kotlin_validate:
     name: Validate the kotlin
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/gradle_localstack_verify.yml@v2 # WORKFLOW_VERSION
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/gradle_localstack_verify.yml@d79e83be2cc392b981dd92c8f6f85007d18032e9 # v2.10.1
     secrets: inherit
     with:
       localstack-services: "sns,sqs,s3"
@@ -41,7 +41,7 @@ jobs:
   build:
     name: Build docker image from hmpps-github-actions
     if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/deployable_branch')
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@v2 # WORKFLOW_VERSION
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@d79e83be2cc392b981dd92c8f6f85007d18032e9 # v2.10.1
     needs:
       - kotlin_validate
     with:
@@ -56,7 +56,7 @@ jobs:
     needs:
       - build
       - helm_lint
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2 # WORKFLOW_VERSION
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@d79e83be2cc392b981dd92c8f6f85007d18032e9 # v2.10.1
     secrets: inherit
     with:
       environment: 'dev'
@@ -67,7 +67,7 @@ jobs:
       - build
       - helm_lint
       - deploy_dev
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2 # WORKFLOW_VERSION
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@d79e83be2cc392b981dd92c8f6f85007d18032e9 # v2.10.1
     secrets: inherit
     with:
       environment: 'preprod'
@@ -78,7 +78,7 @@ jobs:
       - build
       - helm_lint
       - deploy_preprod
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2 # WORKFLOW_VERSION
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@d79e83be2cc392b981dd92c8f6f85007d18032e9 # v2.10.1
     secrets: inherit
     with:
       environment: 'prod'
