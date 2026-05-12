@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("uk.gov.justice.hmpps.gradle-spring-boot") version "10.2.1"
+    id("uk.gov.justice.hmpps.gradle-spring-boot") version "10.2.5"
     kotlin("plugin.spring") version "2.3.20"
     kotlin("jvm") version "2.3.20"
 }
