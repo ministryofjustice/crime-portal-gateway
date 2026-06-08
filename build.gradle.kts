@@ -3,8 +3,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("uk.gov.justice.hmpps.gradle-spring-boot") version "10.3.1"
-    kotlin("plugin.spring") version "2.3.21"
-    kotlin("jvm") version "2.3.21"
+    kotlin("plugin.spring") version "2.4.0"
+    kotlin("jvm") version "2.4.0"
 }
 
 repositories {
@@ -40,8 +40,8 @@ dependencies {
     }
     implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.5")
 
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.21.4")
-    implementation("io.sentry:sentry-spring-boot-4-starter:8.43.0")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.22.0")
+    implementation("io.sentry:sentry-spring-boot-4-starter:8.43.1")
 
     runtimeOnly("org.apache.ws.xmlschema", "xmlschema-core", "2.3.2")
     runtimeOnly("org.glassfish.jaxb:jaxb-runtime:4.0.6")
