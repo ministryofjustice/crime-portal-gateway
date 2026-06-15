@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("uk.gov.justice.hmpps.gradle-spring-boot") version "10.3.1"
+    id("uk.gov.justice.hmpps.gradle-spring-boot") version "10.5.0"
     kotlin("plugin.spring") version "2.4.0"
     kotlin("jvm") version "2.4.0"
 }
@@ -23,12 +23,12 @@ dependencyCheck {
 }
 
 dependencies {
-    implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:7.3.2")
-    implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-autoconfigure:7.3.2")
+    implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:7.4.0")
+    implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-autoconfigure:7.4.0")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
 
-    implementation("org.springframework.ws:spring-ws-security:5.0.1") {
+    implementation("org.springframework.ws:spring-ws-security:5.0.2") {
         exclude(group = "org.bouncycastle", module = "bcprov-jdk18on")
     }
     implementation("com.microsoft.azure:applicationinsights-web:3.7.8")
@@ -41,7 +41,7 @@ dependencies {
     implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.5")
 
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.22.0")
-    implementation("io.sentry:sentry-spring-boot-4-starter:8.43.1")
+    implementation("io.sentry:sentry-spring-boot-4-starter:8.43.2")
 
     runtimeOnly("org.apache.ws.xmlschema", "xmlschema-core", "2.3.2")
     runtimeOnly("org.glassfish.jaxb:jaxb-runtime:4.0.6")
@@ -50,7 +50,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
     testImplementation("org.springframework.boot:spring-boot-test-autoconfigure")
 
-    testImplementation("org.springframework.ws:spring-ws-test:5.0.1")
+    testImplementation("org.springframework.ws:spring-ws-test:5.0.2")
 }
 
 tasks {
