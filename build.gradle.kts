@@ -31,7 +31,7 @@ dependencies {
     implementation("org.springframework.ws:spring-ws-security:5.0.2") {
         exclude(group = "org.bouncycastle", module = "bcprov-jdk18on")
     }
-    implementation("com.microsoft.azure:applicationinsights-web:3.7.8")
+    implementation("com.microsoft.azure:applicationinsights-web:3.7.9")
 
     api("software.amazon.awssdk:s3")
     implementation("wsdl4j:wsdl4j:1.6.3")
@@ -41,7 +41,7 @@ dependencies {
     implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.5")
 
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.22.0")
-    implementation("io.sentry:sentry-spring-boot-4-starter:8.43.2")
+    implementation("io.sentry:sentry-spring-boot-4-starter:8.44.1")
 
     runtimeOnly("org.apache.ws.xmlschema", "xmlschema-core", "2.3.2")
     runtimeOnly("org.glassfish.jaxb:jaxb-runtime:4.0.6")
