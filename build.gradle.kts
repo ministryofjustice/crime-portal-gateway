@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("uk.gov.justice.hmpps.gradle-spring-boot") version "11.0.1"
+    id("uk.gov.justice.hmpps.gradle-spring-boot") version "11.0.2"
     kotlin("plugin.spring") version "2.4.10"
     kotlin("jvm") version "2.4.10"
 }
@@ -41,7 +41,7 @@ dependencies {
     implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.5")
 
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.22.1")
-    implementation("io.sentry:sentry-spring-boot-4-starter:8.50.1")
+    implementation("io.sentry:sentry-spring-boot-4-starter:8.51.0")
 
     runtimeOnly("org.apache.ws.xmlschema", "xmlschema-core", "2.3.2")
     runtimeOnly("org.glassfish.jaxb:jaxb-runtime:4.0.6")
