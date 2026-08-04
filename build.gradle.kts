@@ -30,6 +30,8 @@ dependencies {
 
     implementation("org.springframework.ws:spring-ws-security:5.0.2") {
         exclude(group = "org.bouncycastle", module = "bcprov-jdk18on")
+        exclude(group = "org.bouncycastle", module = "bcpkix-jdk18on")
+        exclude(group = "org.bouncycastle", module = "bcutil-jdk18on")
     }
     implementation("com.microsoft.azure:applicationinsights-web:3.7.9")
 
