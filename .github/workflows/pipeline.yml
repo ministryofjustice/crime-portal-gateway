@@ -27,13 +27,13 @@ jobs:
       matrix:
         environments: ['dev', 'preprod', 'prod']
     name: helm lint
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/test_helm_lint.yml@b7e29ba10659e877df6b75f95fd3d18ae37212a8 # v2.19.1
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/test_helm_lint.yml@a925dcd65e26752fef34b1869dec510c9c5f0bed # v2.20.1
     secrets: inherit
     with:
       environment: ${{ matrix.environments }}
   kotlin_validate:
     name: Validate the kotlin
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/gradle_localstack_verify.yml@b7e29ba10659e877df6b75f95fd3d18ae37212a8 # v2.19.1
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/gradle_localstack_verify.yml@a925dcd65e26752fef34b1869dec510c9c5f0bed # v2.20.1
     secrets: inherit
     with:
       localstack-services: "sns,sqs,s3"
@@ -41,7 +41,7 @@ jobs:
   build:
     name: Build docker image from hmpps-github-actions
     if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/deployable_branch')
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@b7e29ba10659e877df6b75f95fd3d18ae37212a8 # v2.19.1
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@a925dcd65e26752fef34b1869dec510c9c5f0bed # v2.20.1
     needs:
       - kotlin_validate
     with:
