@@ -41,7 +41,7 @@ jobs:
   build:
     name: Build docker image from hmpps-github-actions
     if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/deployable_branch')
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@180ff244a2c1fe09c3a7c669f83583f513c61a65 # v2.19.1
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@b7e29ba10659e877df6b75f95fd3d18ae37212a8 # v2.19.1
     needs:
       - kotlin_validate
     with:
