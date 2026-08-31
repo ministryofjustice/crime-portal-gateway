@@ -23,8 +23,8 @@ dependencyCheck {
 }
 
 dependencies {
-    implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:7.4.0")
-    implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-autoconfigure:7.4.0")
+    implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:7.4.1")
+    implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-autoconfigure:7.4.1")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
 
@@ -43,7 +43,7 @@ dependencies {
     implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.5")
 
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.22.2")
-    implementation("io.sentry:sentry-spring-boot-4-starter:8.53.0")
+    implementation("io.sentry:sentry-spring-boot-4-starter:8.54.0")
 
     runtimeOnly("org.apache.ws.xmlschema", "xmlschema-core", "2.3.2")
     runtimeOnly("org.glassfish.jaxb:jaxb-runtime:4.0.6")
