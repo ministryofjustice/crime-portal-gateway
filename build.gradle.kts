@@ -33,7 +33,7 @@ dependencies {
         exclude(group = "org.bouncycastle", module = "bcpkix-jdk18on")
         exclude(group = "org.bouncycastle", module = "bcutil-jdk18on")
         constraints {
-            runtimeOnly("com.google.guava:guava:33.7.2-jre") {
+            runtimeOnly("com.google.guava:guava:33.8.0-jre") {
                 because("Spring-WS pulls in Guava via WSS4J; 33.7.2-jre fixes CVE-2026-102554")
             }
         }
