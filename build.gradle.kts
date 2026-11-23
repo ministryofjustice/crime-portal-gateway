@@ -32,6 +32,11 @@ dependencies {
         exclude(group = "org.bouncycastle", module = "bcprov-jdk18on")
         exclude(group = "org.bouncycastle", module = "bcpkix-jdk18on")
         exclude(group = "org.bouncycastle", module = "bcutil-jdk18on")
+        constraints {
+            runtimeOnly("com.google.guava:guava:33.7.2-jre") {
+                because("Spring-WS pulls in Guava via WSS4J; 33.7.2-jre fixes CVE-2026-102554")
+            }
+        }
     }
     implementation("com.microsoft.azure:applicationinsights-web:3.7.10")
 
@@ -45,7 +50,7 @@ dependencies {
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.23.0")
     implementation("io.sentry:sentry-spring-boot-4-starter:8.65.0")
 
-    runtimeOnly("org.apache.ws.xmlschema", "xmlschema-core", "2.3.2")
+    runtimeOnly("org.apache.ws.xmlschema:xmlschema-core:2.3.3")
     runtimeOnly("org.glassfish.jaxb:jaxb-runtime:4.0.6")
 
     testImplementation("org.springframework.boot:spring-boot-test")
