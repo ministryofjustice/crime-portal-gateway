@@ -5,6 +5,11 @@ info.app:
 spring:
   application:
     name: crime-portal-gateway
+  autoconfigure:
+    # Incoming requests use SOAP message security in deployed environments.
+    exclude:
+      - uk.gov.justice.hmpps.kotlin.auth.HmppsResourceServerConfiguration
+      - uk.gov.justice.hmpps.kotlin.clienttracking.HmppsClientTrackingConfiguration
   webservices:
     wsdl-locations=classpath:/xsd
   logging:

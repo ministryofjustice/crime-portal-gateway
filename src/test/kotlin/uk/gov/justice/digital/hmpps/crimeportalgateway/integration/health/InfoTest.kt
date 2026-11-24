@@ -14,7 +14,7 @@ import uk.gov.justice.digital.hmpps.crimeportalgateway.integration.IntegrationTe
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, properties = ["product-id=TEST"])
 @AutoConfigureMockMvc
 @Import(TestMessagingConfig::class)
 class InfoTest : IntegrationTestBase() {
@@ -35,6 +35,11 @@ class InfoTest : IntegrationTestBase() {
     fun `Info page is accessible`() {
         val json = getInfoJson()
         assertThat(json.getJSONObject("build").getString("name")).isEqualTo("crime-portal-gateway")
+    }
+
+    @Test
+    fun `Info page reports the configured product ID`() {
+        assertThat(getInfoJson().getString("productId")).isEqualTo("TEST")
     }
 
     @Test
