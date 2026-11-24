@@ -1,5 +1,6 @@
 generic-service:
   nameOverride: crime-portal-gateway
+  productId: HMPPS518 # https://developer-portal.hmpps.service.justice.gov.uk/products/probation-integrations
 
   serviceAccountName: "court-facing-api"
 
